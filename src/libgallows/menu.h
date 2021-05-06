@@ -3,4 +3,4 @@
 using namespace sf;
 
 void MainMenu(RenderWindow& window); // Главное меню
-void select_mode(RenderWindow& window);// меню выбора сложности
+void SelectmodeMenu(RenderWindow& window); // Меню выбора сложности
