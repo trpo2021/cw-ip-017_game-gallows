@@ -50,12 +50,15 @@ void SelectmodeMenu(RenderWindow& window)
         }
         if (Mouse::isButtonPressed(Mouse::Left)) {
             if (Selectnum == 1) {
+                GameMenu(window);
                 isSelect = false;
             }
             if (Selectnum == 2) {
+                GameMenu(window);
                 isSelect = false;
             }
             if (Selectnum == 3) {
+                GameMenu(window);
                 isSelect = false;
             }
         }

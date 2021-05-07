@@ -4,22 +4,20 @@ using namespace sf;
 
 int main()
 {
-	RenderWindow window(VideoMode(1200, 1000), "The gallows");
+    RenderWindow window(VideoMode(1200, 1000), "The gallows");
 
-	MainMenu(window);
+    MainMenu(window);
 
-	while (window.isOpen())
-	{
-		Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::Closed)
-				window.close();
-		}
+    while (window.isOpen()) {
+        Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed)
+                window.close();
+        }
 
-		window.clear();
-		window.display();
-	}
+        window.clear();
+        window.display();
+    }
 
-	return 0;
+    return 0;
 }
