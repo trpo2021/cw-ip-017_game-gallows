@@ -9,7 +9,19 @@ void GameMenu(RenderWindow& window)
 	GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
 	AlphabetTexture.loadFromFile("Images/alphavite.png");
 	Sprite GameBackground(GameMenuTexture), Alphabet[32];
-
+    setlocale(LC_ALL, "Russian");
+    std::string word = "КУКУШКА";
+    int x = 260;
+    Texture cell_file;
+    cell_file.loadFromFile("Images/cell.png");
+    Sprite cell[7];
+    for (int i = 0; i < 7; i++) {
+            cell[i].setTexture(cell_file);
+    }
+    for (int i = 0; i < 7; i++) {
+            cell[i].setPosition(x, 150);
+            x += 100;
+    }
 	int CutImageX = 3;
 	for (int i = 0; i < 32; ++i) {
 		Alphabet[i].setTexture(AlphabetTexture);
@@ -86,7 +98,9 @@ void GameMenu(RenderWindow& window)
 		window.draw(GameBackground);
 		for (int i = 0; i < 32; ++i)
 			window.draw(Alphabet[i]);
-
+                for (int i = 0; i < 7; i++) {
+                    window.draw(cell[i]);
+                }
 		window.display();
 	}
 }
