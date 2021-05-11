@@ -14,15 +14,10 @@ void GameMenu(RenderWindow& window)
 	Sprite GameBackground(GameMenuTexture), Alphabet[32];
 
 	setlocale(LC_ALL, "Russian");
-	//char AlphabetMass[32] = { 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я' };
-	string AlphabetMass = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-	std::string word = "КУКУШКА";
+	string word = "КУКУШКА";
 	const int WORDSIZE = 7;
 	int IndexWord[WORDSIZE];
-	for (int i = 0; i < WORDSIZE; ++i)
-		for (int j = 0; j < 32; ++j)
-			if (word[i] == AlphabetMass[j])
-				IndexWord[i] = j;
+	FillingIndexArray(word, WORDSIZE, IndexWord);
 
 	Texture IndexWordImage;
 	IndexWordImage.loadFromFile("Images/alphavite.png");
@@ -40,7 +35,7 @@ void GameMenu(RenderWindow& window)
 	Sprite MarkerSprite[32];
 	for (int i = 0; i < 32; ++i) {
 		MarkerSprite[i].setTexture(MarkerTexture);
-		if (CheckLetter(AlphabetMass, word, i))
+		if (CheckLetter(word, i))
 			MarkerSprite[i].setTextureRect(IntRect(40, 0, 40, 55));
 		else
 			MarkerSprite[i].setTextureRect(IntRect(0, 0, 40, 55));
@@ -138,7 +133,7 @@ void GameMenu(RenderWindow& window)
 
 			for (int i = 0; i < 32; ++i) {
 				if (Markers[i] == 1) {
-					if (CheckLetter(AlphabetMass, word, i) == 1)
+					if (CheckLetter(word, i))
 						MarkerSprite[i].setColor(Color::Green);
 					else
 						MarkerSprite[i].setColor(Color::Red);
