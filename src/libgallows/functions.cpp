@@ -5,6 +5,7 @@
 using namespace sf;
 
 std::string alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+
 void FillingIndexArray(std::string word, int WORDSIZE, int *IndexWord) {
 	for (int i = 0; i < WORDSIZE; ++i)
 		for (int j = 0; j < 32; ++j)
