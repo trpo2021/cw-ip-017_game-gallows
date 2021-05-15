@@ -9,8 +9,11 @@ using namespace std;
 void GameMenu(RenderWindow& window)
 {
 	setlocale(LC_ALL, "Russian");
-	string word = "КУКУШКА";
+	string word = "KUKUSKA";
+	// string word = "КУКУШКА";
 	const int WORDSIZE = 7;
+
+	cout << "";
 
 	int IndexWord[WORDSIZE];
 	FillingIndexArray(word, WORDSIZE, IndexWord);

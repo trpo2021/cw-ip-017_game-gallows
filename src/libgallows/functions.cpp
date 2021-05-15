@@ -4,7 +4,8 @@
 #include <iostream>
 using namespace sf;
 
-std::string alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+std::string alphabet = "AFFFFFFFFFKFFFFFFFFUFFFFSFFFFFFF";
+//std::string alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 
 void FillingIndexArray(std::string word, int WORDSIZE, int *IndexWord) {
 	for (int i = 0; i < WORDSIZE; ++i)

@@ -56,13 +56,3 @@ clean:
 	$(RM) $(APP_PATH) $(LIB_PATH) $(TEST_PATH)
 	find $(OBJ_DIR) -name '*.o' -exec $(RM) '{}' \;
 	find $(OBJ_DIR) -name '*.d' -exec $(RM) '{}' \;
-# all: compile link
-#
-# compile:
-# 	g++ -I SFML/include -c main.cpp
-#
-# link:
-# 	g++ main.o -o main -L SFML/lib -lsfml-graphics -lsfml-window -lsfml-system
-#
-# clean:
-# 	rm -rf *.o main.exe
