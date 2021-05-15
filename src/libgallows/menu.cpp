@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include <libgallows/menu.h>
+#include "menu.h"
 using namespace sf;
 
 void MainMenu(RenderWindow& window)

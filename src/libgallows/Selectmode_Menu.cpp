@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include <libgallows/menu.h>
+#include "menu.h"
 using namespace sf;
 
 void SelectmodeMenu(RenderWindow& window)
@@ -17,10 +17,10 @@ void SelectmodeMenu(RenderWindow& window)
             background(Selectbackground), model(model1Texture);
     bool isSelect = 1;
     int Selectnum = 0;
-    easy.setPosition(200, 400);
-    medium.setPosition(200, 500);
-    hard.setPosition(200, 600);
-    model.setPosition(600, 300);
+    easy.setPosition(800, 400);
+    medium.setPosition(800, 500);
+    hard.setPosition(800, 600);
+    model.setPosition(100, 300);
     background.setPosition(0, 0);
     while (isSelect) {
         Event event;
@@ -33,17 +33,17 @@ void SelectmodeMenu(RenderWindow& window)
         hard.setColor(Color::Black);
         Selectnum = 0;
 
-        if (IntRect(200, 400, 144, 60).contains(Mouse::getPosition(window))) {
+        if (IntRect(800, 400, 144, 60).contains(Mouse::getPosition(window))) {
             easy.setColor(Color::Green);
             model.setTexture(model1Texture);
             Selectnum = 1;
         }
-        if (IntRect(200, 500, 244, 60).contains(Mouse::getPosition(window))) {
+        if (IntRect(800, 500, 244, 60).contains(Mouse::getPosition(window))) {
             medium.setColor(Color::Blue);
             model.setTexture(model2Texture);
             Selectnum = 2;
         }
-        if (IntRect(200, 600, 144, 60).contains(Mouse::getPosition(window))) {
+        if (IntRect(800, 600, 144, 60).contains(Mouse::getPosition(window))) {
             hard.setColor(Color::Red);
             model.setTexture(model3Texture);
             Selectnum = 3;

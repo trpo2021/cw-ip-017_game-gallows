@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
-#include <libgallows/menu.h>
+#include "C:\Users\petru\source\repos\cw-ip-017_game-gallows\src\libgallows\menu.h"
 using namespace sf;
 
 int main()
 {
     RenderWindow window(VideoMode(1200, 1000), "The gallows");
-
+    window.setFramerateLimit(30);
     MainMenu(window);
 
     while (window.isOpen()) {
