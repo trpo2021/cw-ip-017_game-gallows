@@ -20,3 +20,11 @@ int CheckLetter(std::string word, int a) {
 	}
 	return 0;
 }
+int SumMistakes(bool *Markers, std::string word) {
+	int s = 0;
+	for (int i = 0; i < 32; ++i) {
+		if (!CheckLetter(word, i))
+			s += Markers[i];
+	}
+	return s;
+}
