@@ -28,3 +28,11 @@ int SumMistakes(bool *Markers, std::string word) {
 	}
 	return s;
 }
+int ManYouRight(bool* Markers, std::string word) {
+	int s = 0;
+	for (int i = 0; i < 32; ++i) {
+		if (CheckLetter(word, i))
+			s += Markers[i];
+	}
+	return s;
+}

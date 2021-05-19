@@ -12,36 +12,38 @@ void GameMenu(RenderWindow& window)
     string word = "KUKUSKA";
     // string word = "КУКУШКА";
     const int WORDSIZE = 7;
-
-    cout << "";
+    int CountRightLetters = 4;
 
     int IndexWord[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, IndexWord);
 
     Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
-            WordImage, GameMenuTexture_2;
+        WordImage, GameMenuTexture_2, VictoryTexture;
     GameMenuTexture_2.loadFromFile("Images/Background_in_the_game_defeat.jpg");
     GameMenuTexture.loadFromFile(
-            "Images/Background_in_the_game.jpg"); // Задний план игры
+        "Images/Background_in_the_game.jpg"); // Задний план игры
     AlphabetTexture.loadFromFile(
-            "Images/alphavite.png"); // Алфавит для выбора букв
+        "Images/alphavite.png"); // Алфавит для выбора букв
     cell_file.loadFromFile(
-            "Images/cell.jpg"); // Ячейки для растановки загаданного слова
+        "Images/cell.jpg"); // Ячейки для растановки загаданного слова
     MarkerTexture.loadFromFile(
-            "Images/markers.png"); // Маркеры для букв, что уже нажали
+        "Images/markers.png"); // Маркеры для букв, что уже нажали
     WordImage.loadFromFile("Images/alphavite.png");
+    VictoryTexture.loadFromFile("Images/initial_victory.jpg");
 
     Texture firstfail_image, secondfail_image, thirdfail_image, fourfail_image,
-            fivefail_image, defeat_image;
+        fivefail_image, defeat_image;
     firstfail_image.loadFromFile("Images/first_fail.png");
     secondfail_image.loadFromFile("Images/second_fail.png");
     thirdfail_image.loadFromFile("Images/three_mistakes.png");
     fourfail_image.loadFromFile("Images/four_mistakes.png");
     fivefail_image.loadFromFile("Images/five_mistakes.png");
     defeat_image.loadFromFile("Images/defeat.jpg");
+
     Sprite defeat;
     defeat.setTexture(defeat_image);
     defeat.setPosition(65, 100);
+
     Sprite parts_of_the_gallows[5];
     //создаем массив со спрайтами состоящих из частей виселицы
     parts_of_the_gallows[0].setTexture(firstfail_image);
@@ -49,13 +51,13 @@ void GameMenu(RenderWindow& window)
     parts_of_the_gallows[2].setTexture(thirdfail_image);
     parts_of_the_gallows[3].setTexture(fourfail_image);
     parts_of_the_gallows[4].setTexture(fivefail_image);
-    int mistakes = 0;
+    //int mistakes = 0;
     for (int i = 0; i < 5; i++) {
         parts_of_the_gallows[i].setPosition(800, 244);
     }
 
     Sprite GameBackground(GameMenuTexture),
-            GameBackground_defeat(GameMenuTexture_2);
+        GameBackground_defeat(GameMenuTexture_2);
     GameBackground.setPosition(0, 0);
     GameBackground_defeat.setPosition(0, 0);
     Sprite AlphabetSprite[32];
@@ -114,11 +116,14 @@ void GameMenu(RenderWindow& window)
         WordSprite[i].setPosition(CellPositionX + 8, 80);
         CellPositionX += 100;
     }
+    Sprite VictorySprite;
+    VictorySprite.setTexture(VictoryTexture);
+    VictorySprite.setPosition(200, 100);
 
     bool isGameMenu = 1;
     int LetterNum = -1;
-    bool Markers[32] = {0};
-    bool WordLetter[WORDSIZE] = {0};
+    bool Markers[32] = { 0 };
+    bool WordLetter[WORDSIZE] = { 0 };
 
     while (isGameMenu) {
         Event event;
@@ -138,7 +143,7 @@ void GameMenu(RenderWindow& window)
 
         for (int i = 0; i < 13; ++i) {
             if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                        .contains(Mouse::getPosition(window))) {
+                .contains(Mouse::getPosition(window))) {
                 AlphabetSprite[i].setColor(sf::Color::Blue);
                 (LetterNum) = i;
             }
@@ -148,7 +153,7 @@ void GameMenu(RenderWindow& window)
         RowAlphabetY += 80;
         for (int i = 13; i < 26; ++i) {
             if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                        .contains(Mouse::getPosition(window))) {
+                .contains(Mouse::getPosition(window))) {
                 AlphabetSprite[i].setColor(sf::Color::Blue);
                 (LetterNum) = i;
             }
@@ -158,7 +163,7 @@ void GameMenu(RenderWindow& window)
         RowAlphabetY += 80;
         for (int i = 26; i < 32; ++i) {
             if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                        .contains(Mouse::getPosition(window))) {
+                .contains(Mouse::getPosition(window))) {
                 AlphabetSprite[i].setColor(sf::Color::Blue);
                 (LetterNum) = i;
             }
@@ -188,25 +193,32 @@ void GameMenu(RenderWindow& window)
             window.draw(GameBackground);
         else
             window.draw(GameBackground_defeat);
+
         for (int i = 0; i < 32; ++i) {
             window.draw(AlphabetSprite[i]);
         }
 
-        if (SumMistakes(Markers, word) > -1 && SumMistakes(Markers, word) < 5)
+        if (ManYouRight(Markers, word) == CountRightLetters) {
+            window.draw(VictorySprite);
+        }
+
+        if (SumMistakes(Markers, word) > -1 && SumMistakes(Markers, word) < 5 && ManYouRight(Markers, word) < CountRightLetters)
             window.draw(parts_of_the_gallows[SumMistakes(Markers, word)]);
+
         if (SumMistakes(Markers, word) > 4)
             window.draw(defeat);
+
         for (int i = 0; i < 32; ++i)
             if (Markers[i])
                 window.draw(MarkerSprite[i]);
-        if (SumMistakes(Markers, word) < 5)
+
+        if (SumMistakes(Markers, word) < 5 && ManYouRight(Markers, word) < CountRightLetters)
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
                 if (WordLetter[i])
                     window.draw(WordSprite[i]);
             }
-
         window.display();
     }
 }
