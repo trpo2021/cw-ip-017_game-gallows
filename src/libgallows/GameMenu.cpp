@@ -18,46 +18,34 @@ void GameMenu(RenderWindow& window)
     FillingIndexArray(word, WORDSIZE, IndexWord);
 
     Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
-        WordImage, GameMenuTexture_2, VictoryTexture;
-    GameMenuTexture_2.loadFromFile("Images/Background_in_the_game_defeat.jpg");
-    GameMenuTexture.loadFromFile(
-        "Images/Background_in_the_game.jpg"); // Задний план игры
-    AlphabetTexture.loadFromFile(
-        "Images/alphavite.png"); // Алфавит для выбора букв
-    cell_file.loadFromFile(
-        "Images/cell.jpg"); // Ячейки для растановки загаданного слова
-    MarkerTexture.loadFromFile(
-        "Images/markers.png"); // Маркеры для букв, что уже нажали
+        WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
+        PartsGallowsTexture;
+    GameMenuDefeatTexture.loadFromFile("Images/Background_in_the_game_defeat.jpg");
+    GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
+    AlphabetTexture.loadFromFile("Images/alphavite.png");
+    cell_file.loadFromFile("Images/cell.jpg");
+    MarkerTexture.loadFromFile("Images/markers.png");
     WordImage.loadFromFile("Images/alphavite.png");
     VictoryTexture.loadFromFile("Images/initial_victory.jpg");
+    PartsGallowsTexture.loadFromFile("Images/Parts_Of_Gallows.png");
+    DefeatTexture.loadFromFile("Images/defeat.jpg");
 
-    Texture firstfail_image, secondfail_image, thirdfail_image, fourfail_image,
-        fivefail_image, defeat_image;
-    firstfail_image.loadFromFile("Images/first_fail.png");
-    secondfail_image.loadFromFile("Images/second_fail.png");
-    thirdfail_image.loadFromFile("Images/three_mistakes.png");
-    fourfail_image.loadFromFile("Images/four_mistakes.png");
-    fivefail_image.loadFromFile("Images/five_mistakes.png");
-    defeat_image.loadFromFile("Images/defeat.jpg");
+    Sprite DefeatSprite;
+    DefeatSprite.setTexture(DefeatTexture);
+    DefeatSprite.setPosition(65, 100);
 
-    Sprite defeat;
-    defeat.setTexture(defeat_image);
-    defeat.setPosition(65, 100);
-
-    Sprite parts_of_the_gallows[5];
-    //создаем массив со спрайтами состоящих из частей виселицы
-    parts_of_the_gallows[0].setTexture(firstfail_image);
-    parts_of_the_gallows[1].setTexture(secondfail_image);
-    parts_of_the_gallows[2].setTexture(thirdfail_image);
-    parts_of_the_gallows[3].setTexture(fourfail_image);
-    parts_of_the_gallows[4].setTexture(fivefail_image);
-    //int mistakes = 0;
-    for (int i = 0; i < 5; i++) {
-        parts_of_the_gallows[i].setPosition(800, 244);
+    Sprite PartsGallowsSprite[5];
+    int CutImageXPartsGallows = 1;
+    for (int i = 0; i < 5; ++i)
+    {
+        PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
+        PartsGallowsSprite[i].setTextureRect(IntRect(CutImageXPartsGallows, 1, 241, 398));
+        PartsGallowsSprite[i].setPosition(800, 240);
+        CutImageXPartsGallows += 242;
     }
 
     Sprite GameBackground(GameMenuTexture),
-        GameBackground_defeat(GameMenuTexture_2);
+        GameBackground_defeat(GameMenuDefeatTexture);
     GameBackground.setPosition(0, 0);
     GameBackground_defeat.setPosition(0, 0);
     Sprite AlphabetSprite[32];
@@ -116,6 +104,7 @@ void GameMenu(RenderWindow& window)
         WordSprite[i].setPosition(CellPositionX + 8, 80);
         CellPositionX += 100;
     }
+
     Sprite VictorySprite;
     VictorySprite.setTexture(VictoryTexture);
     VictorySprite.setPosition(200, 100);
@@ -189,6 +178,7 @@ void GameMenu(RenderWindow& window)
                     MarkerSprite[i].setColor(Color::Red);
             }
         }
+
         if (SumMistakes(Markers, word) < 5)
             window.draw(GameBackground);
         else
@@ -202,17 +192,19 @@ void GameMenu(RenderWindow& window)
             window.draw(VictorySprite);
         }
 
-        if (SumMistakes(Markers, word) > -1 && SumMistakes(Markers, word) < 5 && ManYouRight(Markers, word) < CountRightLetters)
-            window.draw(parts_of_the_gallows[SumMistakes(Markers, word)]);
+        if (SumMistakes(Markers, word) > -1 && SumMistakes(Markers, word) < 5
+            && ManYouRight(Markers, word) < CountRightLetters)
+            window.draw(PartsGallowsSprite[SumMistakes(Markers, word)]);
 
         if (SumMistakes(Markers, word) > 4)
-            window.draw(defeat);
+            window.draw(DefeatSprite);
 
         for (int i = 0; i < 32; ++i)
             if (Markers[i])
                 window.draw(MarkerSprite[i]);
 
-        if (SumMistakes(Markers, word) < 5 && ManYouRight(Markers, word) < CountRightLetters)
+        if (SumMistakes(Markers, word) < 5
+            && ManYouRight(Markers, word) < CountRightLetters)
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
