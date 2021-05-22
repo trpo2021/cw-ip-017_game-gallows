@@ -13,9 +13,10 @@ void GameMenu(RenderWindow& window)
     // string word = "КУКУШКА";
     const int WORDSIZE = 7;
     int CountRightLetters = 4;
+    const int NUMBERLETTERS = 32; // Количество букв в алфавите
 
     int IndexWord[WORDSIZE];
-    FillingIndexArray(word, WORDSIZE, IndexWord);
+    FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
 
     Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
         WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
@@ -48,18 +49,18 @@ void GameMenu(RenderWindow& window)
         GameBackground_defeat(GameMenuDefeatTexture);
     GameBackground.setPosition(0, 0);
     GameBackground_defeat.setPosition(0, 0);
-    Sprite AlphabetSprite[32];
+    Sprite AlphabetSprite[NUMBERLETTERS];
     int CutImageX = 3; // Координата, с которой нужно начать вырезать буквы
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < NUMBERLETTERS; ++i) {
         AlphabetSprite[i].setTexture(AlphabetTexture);
         AlphabetSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
         CutImageX += 53;
     }
 
-    Sprite MarkerSprite[32];
-    for (int i = 0; i < 32; ++i) {
+    Sprite MarkerSprite[NUMBERLETTERS];
+    for (int i = 0; i < NUMBERLETTERS; ++i) {
         MarkerSprite[i].setTexture(MarkerTexture);
-        if (CheckLetter(word, i))
+        if (CheckLetter(word, WORDSIZE, i))
             MarkerSprite[i].setTextureRect(IntRect(40, 0, 40, 55));
         else
             MarkerSprite[i].setTextureRect(IntRect(0, 0, 40, 55));
@@ -96,7 +97,7 @@ void GameMenu(RenderWindow& window)
     }
 
     Sprite CellSprite[7];
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < WORDSIZE; i++)
         CellSprite[i].setTexture(cell_file);
     int CellPositionX = 260;
     for (int i = 0; i < WORDSIZE; i++) {
@@ -111,7 +112,7 @@ void GameMenu(RenderWindow& window)
 
     bool isGameMenu = 1;
     int LetterNum = -1;
-    bool Markers[32] = { 0 };
+    bool Markers[NUMBERLETTERS] = { 0 };
     bool WordLetter[WORDSIZE] = { 0 };
 
     while (isGameMenu) {
@@ -122,7 +123,7 @@ void GameMenu(RenderWindow& window)
 
         LetterNum = -1;
 
-        for (int i = 0; i < 32; ++i) {
+        for (int i = 0; i < NUMBERLETTERS; ++i) {
             AlphabetSprite[i].setColor(Color::Black);
         }
 
@@ -162,7 +163,7 @@ void GameMenu(RenderWindow& window)
         RowAlphabetY = StartRowAlphabetY;
 
         if (Mouse::isButtonPressed(Mouse::Left))
-            for (int i = 0; i < 32; ++i)
+            for (int i = 0; i < NUMBERLETTERS; ++i)
                 if (LetterNum == i) {
                     Markers[i] = 1;
                     for (int j = 0; j < WORDSIZE; ++j)
@@ -170,41 +171,41 @@ void GameMenu(RenderWindow& window)
                             WordLetter[j] = 1;
                 }
 
-        for (int i = 0; i < 32; ++i) {
+        for (int i = 0; i < NUMBERLETTERS; ++i) {
             if (Markers[i] == 1) {
-                if (CheckLetter(word, i))
+                if (CheckLetter(word, WORDSIZE, i))
                     MarkerSprite[i].setColor(Color::Green);
                 else
                     MarkerSprite[i].setColor(Color::Red);
             }
         }
 
-        if (SumMistakes(Markers, word) < 5)
+        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5)
             window.draw(GameBackground);
         else
             window.draw(GameBackground_defeat);
 
-        for (int i = 0; i < 32; ++i) {
+        for (int i = 0; i < NUMBERLETTERS; ++i) {
             window.draw(AlphabetSprite[i]);
         }
 
-        if (ManYouRight(Markers, word) == CountRightLetters) {
+        if (ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) == CountRightLetters) {
             window.draw(VictorySprite);
         }
 
-        if (SumMistakes(Markers, word) > -1 && SumMistakes(Markers, word) < 5
-            && ManYouRight(Markers, word) < CountRightLetters)
-            window.draw(PartsGallowsSprite[SumMistakes(Markers, word)]);
+        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) > -1 && SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5
+            && ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) < CountRightLetters)
+            window.draw(PartsGallowsSprite[SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE)]);
 
-        if (SumMistakes(Markers, word) > 4)
+        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) > 4)
             window.draw(DefeatSprite);
 
-        for (int i = 0; i < 32; ++i)
+        for (int i = 0; i < NUMBERLETTERS; ++i)
             if (Markers[i])
                 window.draw(MarkerSprite[i]);
 
-        if (SumMistakes(Markers, word) < 5
-            && ManYouRight(Markers, word) < CountRightLetters)
+        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5
+            && ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) < CountRightLetters)
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
