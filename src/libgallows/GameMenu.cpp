@@ -65,26 +65,24 @@ void GameMenu(RenderWindow& window)
         else
             MarkerSprite[i].setTextureRect(IntRect(0, 0, 40, 55));
     }
+
     int StartRowAlphabetX = 250, StartRowAlphabetY = 700;
     int RowAlphabetX = StartRowAlphabetX, RowAlphabetY = StartRowAlphabetY;
-    for (int i = 0; i < 13; ++i) {
+    for (int i = 0; i < 32; ++i)
+    {
         AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
         MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
         RowAlphabetX += 50;
-    }
-    RowAlphabetX = StartRowAlphabetX;
-    RowAlphabetY += 80;
-    for (int i = 13; i < 26; ++i) {
-        AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
-        MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
-        RowAlphabetX += 50;
-    }
-    RowAlphabetX = StartRowAlphabetX + 150;
-    RowAlphabetY += 80;
-    for (int i = 26; i < 32; ++i) {
-        AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
-        MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
-        RowAlphabetX += 50;
+        if (i == 12)
+        {
+            RowAlphabetX = StartRowAlphabetX;
+            RowAlphabetY += 80;
+        }
+        else if (i == 25)
+        {
+            RowAlphabetX = StartRowAlphabetX + 150;
+            RowAlphabetY += 80;
+        }
     }
     RowAlphabetX = StartRowAlphabetX;
     RowAlphabetY = StartRowAlphabetY;
@@ -131,33 +129,24 @@ void GameMenu(RenderWindow& window)
             WordSprite[i].setColor(Color::Black);
         }
 
-        for (int i = 0; i < 13; ++i) {
-            if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                .contains(Mouse::getPosition(window))) {
+        for (int i = 0; i < 32; ++i)
+        {
+            if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
+            {
                 AlphabetSprite[i].setColor(sf::Color::Blue);
                 (LetterNum) = i;
             }
             RowAlphabetX += 50;
-        }
-        RowAlphabetX = StartRowAlphabetX;
-        RowAlphabetY += 80;
-        for (int i = 13; i < 26; ++i) {
-            if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                .contains(Mouse::getPosition(window))) {
-                AlphabetSprite[i].setColor(sf::Color::Blue);
-                (LetterNum) = i;
+            if (i == 12)
+            {
+                RowAlphabetX = StartRowAlphabetX;
+                RowAlphabetY += 80;
             }
-            RowAlphabetX += 50;
-        }
-        RowAlphabetX = StartRowAlphabetX + 150;
-        RowAlphabetY += 80;
-        for (int i = 26; i < 32; ++i) {
-            if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
-                .contains(Mouse::getPosition(window))) {
-                AlphabetSprite[i].setColor(sf::Color::Blue);
-                (LetterNum) = i;
+            else if (i == 25)
+            {
+                RowAlphabetX = StartRowAlphabetX + 150;
+                RowAlphabetY += 80;
             }
-            RowAlphabetX += 50;
         }
         RowAlphabetX = StartRowAlphabetX;
         RowAlphabetY = StartRowAlphabetY;
