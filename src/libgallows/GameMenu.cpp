@@ -8,206 +8,245 @@ using namespace std;
 
 void GameMenu(RenderWindow& window)
 {
-    setlocale(LC_ALL, "Russian");
     string word = "KUKUSKA";
-    // string word = "КУКУШКА";
+    const int CountPossibleMistakes = 6;
     const int WORDSIZE = 7;
     int CountRightLetters = 4;
     const int NUMBERLETTERS = 32; // Количество букв в алфавите
 
-    int IndexWord[WORDSIZE];
-    FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
+  int IndexWord[WORDSIZE];
+  FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
 
-    Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
-        WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
-        PartsGallowsTexture;
-    GameMenuDefeatTexture.loadFromFile("Images/Background_in_the_game_defeat.jpg");
-    GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
-    AlphabetTexture.loadFromFile("Images/alphavite.png");
-    cell_file.loadFromFile("Images/cell.jpg");
-    MarkerTexture.loadFromFile("Images/markers.png");
-    WordImage.loadFromFile("Images/alphavite.png");
-    VictoryTexture.loadFromFile("Images/initial_victory.jpg");
-    PartsGallowsTexture.loadFromFile("Images/Parts_Of_Gallows.png");
-    DefeatTexture.loadFromFile("Images/defeat.jpg");
+  Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
+      WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
+      PartsGallowsTexture, TimerNumbersTexture;
+  GameMenuDefeatTexture.loadFromFile("Images/Background_in_the_game_defeat.jpg");
+  GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
+  AlphabetTexture.loadFromFile("Images/alphavite.png");
+  cell_file.loadFromFile("Images/cell.jpg");
+  MarkerTexture.loadFromFile("Images/markers.png");
+  WordImage.loadFromFile("Images/alphavite.png");
+  VictoryTexture.loadFromFile("Images/initial_victory.jpg");
+  PartsGallowsTexture.loadFromFile("Images/Parts_Of_Gallows.png");
+  DefeatTexture.loadFromFile("Images/defeat.jpg");
+  TimerNumbersTexture.loadFromFile("Images/numbers_for_timer.png");
 
-    Sprite DefeatSprite;
-    DefeatSprite.setTexture(DefeatTexture);
-    DefeatSprite.setPosition(65, 100);
+  Sprite TimerNumbersSprite[9];
+  int CutImageXPartsTimerNumbers = 56;
+  for (int i = 0; i < 9; ++i)
+  {
+      TimerNumbersSprite[i].setTexture(TimerNumbersTexture);
+      TimerNumbersSprite[i].setTextureRect(IntRect(CutImageXPartsTimerNumbers, 1, 54, 98));
+      TimerNumbersSprite[i].setPosition(1050, 730);
+      CutImageXPartsTimerNumbers += 55;
+  }
 
-    Sprite PartsGallowsSprite[5];
-    int CutImageXPartsGallows = 1;
-    for (int i = 0; i < 5; ++i)
-    {
-        PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
-        PartsGallowsSprite[i].setTextureRect(IntRect(CutImageXPartsGallows, 1, 241, 398));
-        PartsGallowsSprite[i].setPosition(800, 240);
-        CutImageXPartsGallows += 242;
-    }
+  Sprite DefeatSprite;
+  DefeatSprite.setTexture(DefeatTexture);
+  DefeatSprite.setPosition(65, 100);
 
-    Sprite GameBackground(GameMenuTexture),
-        GameBackground_defeat(GameMenuDefeatTexture);
-    GameBackground.setPosition(0, 0);
-    GameBackground_defeat.setPosition(0, 0);
-    Sprite AlphabetSprite[NUMBERLETTERS];
-    int CutImageX = 3; // Координата, с которой нужно начать вырезать буквы
-    for (int i = 0; i < NUMBERLETTERS; ++i) {
-        AlphabetSprite[i].setTexture(AlphabetTexture);
-        AlphabetSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
-        CutImageX += 53;
-    }
+  Sprite PartsGallowsSprite[CountPossibleMistakes];
+  int CutImageXPartsGallows = 1;
+  for (int i = 0; i < CountPossibleMistakes; ++i)
+  {
+      PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
+      PartsGallowsSprite[i].setTextureRect(IntRect(CutImageXPartsGallows, 1, 241, 398));
+      PartsGallowsSprite[i].setPosition(800, 240);
+      if (i != 4 )
+          CutImageXPartsGallows += 242;
+  }
 
-    Sprite MarkerSprite[NUMBERLETTERS];
-    for (int i = 0; i < NUMBERLETTERS; ++i) {
-        MarkerSprite[i].setTexture(MarkerTexture);
-        if (CheckLetter(word, WORDSIZE, i))
-            MarkerSprite[i].setTextureRect(IntRect(40, 0, 40, 55));
-        else
-            MarkerSprite[i].setTextureRect(IntRect(0, 0, 40, 55));
-    }
+  Sprite GameBackground(GameMenuTexture),
+      GameBackground_defeat(GameMenuDefeatTexture);
+  GameBackground.setPosition(0, 0);
+  GameBackground_defeat.setPosition(0, 0);
+  Sprite AlphabetSprite[NUMBERLETTERS];
+  int CutImageX = 3; // Координата, с которой нужно начать вырезать буквы
+  for (int i = 0; i < NUMBERLETTERS; ++i) {
+      AlphabetSprite[i].setTexture(AlphabetTexture);
+      AlphabetSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
+      CutImageX += 53;
+  }
 
-    int StartRowAlphabetX = 250, StartRowAlphabetY = 700;
-    int RowAlphabetX = StartRowAlphabetX, RowAlphabetY = StartRowAlphabetY;
-    for (int i = 0; i < 32; ++i)
-    {
-        AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
-        MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
-        RowAlphabetX += 50;
-        if (i == 12)
-        {
-            RowAlphabetX = StartRowAlphabetX;
-            RowAlphabetY += 80;
-        }
-        else if (i == 25)
-        {
-            RowAlphabetX = StartRowAlphabetX + 150;
-            RowAlphabetY += 80;
-        }
-    }
-    RowAlphabetX = StartRowAlphabetX;
-    RowAlphabetY = StartRowAlphabetY;
+  Sprite MarkerSprite[NUMBERLETTERS];
+  for (int i = 0; i < NUMBERLETTERS; ++i) {
+      MarkerSprite[i].setTexture(MarkerTexture);
+      if (CheckLetter(word, WORDSIZE, i))
+          MarkerSprite[i].setTextureRect(IntRect(40, 0, 40, 55));
+      else
+          MarkerSprite[i].setTextureRect(IntRect(0, 0, 40, 55));
+  }
 
-    Sprite WordSprite[WORDSIZE];
-    for (int i = 0; i < WORDSIZE; i++) {
-        CutImageX = 53 * (IndexWord[i] + 1) - 53 + 3;
-        WordSprite[i].setTexture(WordImage);
-        WordSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
-    }
+  int StartRowAlphabetX = 250, StartRowAlphabetY = 700;
+  int RowAlphabetX = StartRowAlphabetX, RowAlphabetY = StartRowAlphabetY;
+  for (int i = 0; i < 32; ++i)
+  {
+      AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
+      MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
+      RowAlphabetX += 50;
+      if (i == 12)
+      {
+          RowAlphabetX = StartRowAlphabetX;
+          RowAlphabetY += 80;
+      }
+      else if (i == 25)
+      {
+          RowAlphabetX = StartRowAlphabetX + 150;
+          RowAlphabetY += 80;
+      }
+  }
+  RowAlphabetX = StartRowAlphabetX;
+  RowAlphabetY = StartRowAlphabetY;
 
-    Sprite CellSprite[7];
-    for (int i = 0; i < WORDSIZE; i++)
-        CellSprite[i].setTexture(cell_file);
-    int CellPositionX = 260;
-    for (int i = 0; i < WORDSIZE; i++) {
-        CellSprite[i].setPosition(CellPositionX, 150);
-        WordSprite[i].setPosition(CellPositionX + 8, 80);
-        CellPositionX += 100;
-    }
+  Sprite WordSprite[WORDSIZE];
+  for (int i = 0; i < WORDSIZE; i++) {
+      CutImageX = 53 * (IndexWord[i] + 1) - 53 + 3;
+      WordSprite[i].setTexture(WordImage);
+      WordSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
+  }
 
-    Sprite VictorySprite;
-    VictorySprite.setTexture(VictoryTexture);
-    VictorySprite.setPosition(200, 100);
+  Sprite CellSprite[WORDSIZE];
+  for (int i = 0; i < WORDSIZE; i++)
+      CellSprite[i].setTexture(cell_file);
+  int CellPositionX = 260;
+  for (int i = 0; i < WORDSIZE; i++) {
+      CellSprite[i].setPosition(CellPositionX, 150);
+      WordSprite[i].setPosition(CellPositionX + 8, 80);
+      CellPositionX += 100;
+  }
 
-    bool isGameOver = 0;
-    bool isGameMenu = 1;
-    int LetterNum = -1;
-    bool Markers[NUMBERLETTERS] = { 0 };
-    bool WordLetter[WORDSIZE] = { 0 };
+  Sprite VictorySprite;
+  VictorySprite.setTexture(VictoryTexture);
+  VictorySprite.setPosition(200, 100);
 
-    while (isGameMenu) {
-        Event event;
-        while (window.pollEvent(event))
-            if (event.type == Event::Closed)
-                window.close();
+  bool isGameOver = 0;
+  bool isGameMenu = 1;
+  int LetterNum = -1;
+  bool Markers[NUMBERLETTERS] = { 0 };
+  bool WordLetter[WORDSIZE] = { 0 };
+  int SummMistakes = -1;
+  int SumRightLettersSelectPlayer = 0;
 
-        LetterNum = -1;
+  Clock timer;
+  int tm = 10;
+  bool StartTimer = 0;
 
-        for (int i = 0; i < NUMBERLETTERS; ++i) {
-            AlphabetSprite[i].setColor(Color::Black);
-        }
+  while (isGameMenu) {
+      Event event;
+      while (window.pollEvent(event))
+          if (event.type == Event::Closed)
+              window.close();
 
-        for (int i = 0; i < WORDSIZE; ++i) {
-            WordSprite[i].setColor(Color::Black);
-        }
+      LetterNum = -1;
 
-        if (ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) == CountRightLetters || SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) == 5)
-            isGameOver = 1;
+      SumRightLettersSelectPlayer = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
 
-        if (isGameOver == 0)
-        {
-            for (int i = 0; i < 32; ++i)
-            {
-                if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
-                {
-                    AlphabetSprite[i].setColor(sf::Color::Blue);
-                    (LetterNum) = i;
-                }
-                RowAlphabetX += 50;
-                if (i == 12)
-                {
-                    RowAlphabetX = StartRowAlphabetX;
-                    RowAlphabetY += 80;
-                }
-                else if (i == 25)
-                {
-                    RowAlphabetX = StartRowAlphabetX + 150;
-                    RowAlphabetY += 80;
-                }
-            }
-            RowAlphabetX = StartRowAlphabetX;
-            RowAlphabetY = StartRowAlphabetY;
+      if (tm != 0)
+          SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
+      else
+          SummMistakes++;
 
-            if (Mouse::isButtonPressed(Mouse::Left))
-                for (int i = 0; i < NUMBERLETTERS; ++i)
-                    if (LetterNum == i) {
-                        Markers[i] = 1;
-                        for (int j = 0; j < WORDSIZE; ++j)
-                            if (IndexWord[j] == i)
-                                WordLetter[j] = 1;
-                    }
+      if (StartTimer == 0 && SummMistakes == CountPossibleMistakes - 1)
+      {
+          Clock TempTimer;
+          timer = TempTimer;
+          StartTimer = 1;
+      }
+      if (SummMistakes == (CountPossibleMistakes - 1) && tm != 0 && SumRightLettersSelectPlayer < CountRightLetters)
+          tm = 10 - timer.getElapsedTime().asSeconds();
 
-            for (int i = 0; i < NUMBERLETTERS; ++i) {
-                if (Markers[i] == 1) {
-                    if (CheckLetter(word, WORDSIZE, i))
-                        MarkerSprite[i].setColor(Color::Green);
-                    else
-                        MarkerSprite[i].setColor(Color::Red);
-                }
-            }
-        }
+      for (int i = 0; i < NUMBERLETTERS; ++i) {
+          AlphabetSprite[i].setColor(Color::Black);
+      }
 
-        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5)
-            window.draw(GameBackground);
-        else
-            window.draw(GameBackground_defeat);
+      for (int i = 0; i < WORDSIZE; ++i) {
+          WordSprite[i].setColor(Color::Black);
+      }
 
-        for (int i = 0; i < NUMBERLETTERS; ++i) {
-            window.draw(AlphabetSprite[i]);
-        }
+      for (int i = 0; i < 9; ++i) {
+          TimerNumbersSprite[i].setColor(Color::Black);
+      }
 
-        if (ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) == CountRightLetters) {
-            window.draw(VictorySprite);
-        }
+      if (SumRightLettersSelectPlayer == CountRightLetters || SummMistakes == CountPossibleMistakes)
+          isGameOver = 1;
+      if (isGameOver == 0)
+      {
+          for (int i = 0; i < 32; ++i)
+          {
+              if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
+              {
+                  AlphabetSprite[i].setColor(sf::Color::Blue);
+                  (LetterNum) = i;
+              }
+              RowAlphabetX += 50;
+              if (i == 12)
+              {
+                  RowAlphabetX = StartRowAlphabetX;
+                  RowAlphabetY += 80;
+              }
+              else if (i == 25)
+              {
+                  RowAlphabetX = StartRowAlphabetX + 150;
+                  RowAlphabetY += 80;
+              }
+          }
+          RowAlphabetX = StartRowAlphabetX;
+          RowAlphabetY = StartRowAlphabetY;
 
-        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) > -1 && SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5
-            && ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) < CountRightLetters)
-            window.draw(PartsGallowsSprite[SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE)]);
+          if (Mouse::isButtonPressed(Mouse::Left))
+              for (int i = 0; i < NUMBERLETTERS; ++i)
+                  if (LetterNum == i) {
+                      Markers[i] = 1;
+                      for (int j = 0; j < WORDSIZE; ++j)
+                          if (IndexWord[j] == i)
+                              WordLetter[j] = 1;
+                  }
 
-        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) > 4)
-            window.draw(DefeatSprite);
+          for (int i = 0; i < NUMBERLETTERS; ++i) {
+              if (Markers[i] == 1) {
+                  if (CheckLetter(word, WORDSIZE, i))
+                      MarkerSprite[i].setColor(Color::Green);
+                  else
+                      MarkerSprite[i].setColor(Color::Red);
+              }
+          }
+      }
 
-        for (int i = 0; i < NUMBERLETTERS; ++i)
-            if (Markers[i])
-                window.draw(MarkerSprite[i]);
+      if (SummMistakes < CountPossibleMistakes)
+          window.draw(GameBackground);
+      else
+      {
+          window.draw(GameBackground_defeat);
+          window.draw(DefeatSprite);
+      }
 
-        if (SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) < 5
-            && ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) < CountRightLetters)
-            for (int i = 0; i < WORDSIZE; i++) {
-                window.draw(CellSprite[i]);
+      for (int i = 0; i < NUMBERLETTERS; ++i) {
+          window.draw(AlphabetSprite[i]);
+      }
 
-                if (WordLetter[i])
-                    window.draw(WordSprite[i]);
-            }
-        window.display();
-    }
+      if (SumRightLettersSelectPlayer == CountRightLetters) {
+          window.draw(VictorySprite);
+      }
+
+      if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes && SumRightLettersSelectPlayer < CountRightLetters)
+          window.draw(PartsGallowsSprite[SummMistakes]);
+
+      for (int i = 0; i < NUMBERLETTERS; ++i)
+          if (Markers[i])
+              window.draw(MarkerSprite[i]);
+
+      if (SummMistakes < CountPossibleMistakes && SumRightLettersSelectPlayer < CountRightLetters)
+          for (int i = 0; i < WORDSIZE; i++) {
+              window.draw(CellSprite[i]);
+
+              if (WordLetter[i])
+                  window.draw(WordSprite[i]);
+          }
+
+      if (SummMistakes == CountPossibleMistakes - 1 && tm != 0 && tm != 10)
+      {
+          window.draw(TimerNumbersSprite[tm - 1]);
+      }
+      window.display();
+  }
 }
