@@ -1,6 +1,7 @@
 #include "functions.h"
 #include "menu.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <string>
 using namespace sf;
@@ -16,6 +17,15 @@ void GameMenu(RenderWindow& window)
 
   int IndexWord[WORDSIZE];
   FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
+
+  Music GameMusic;
+  GameMusic.openFromFile("Music/GameMenuMusic.wav");
+  GameMusic.setVolume(15.f);
+  GameMusic.play();
+
+  Music Last10Sec;
+  Last10Sec.openFromFile("Music/Last10sec.wav");
+  Last10Sec.setVolume(5.f);
 
   Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
       WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
@@ -143,11 +153,14 @@ void GameMenu(RenderWindow& window)
 
       if (tm != 0)
           SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
-      else
+      else {
           SummMistakes++;
+      }
 
       if (StartTimer == 0 && SummMistakes == CountPossibleMistakes - 1)
       {
+          GameMusic.stop();
+          Last10Sec.play();
           Clock TempTimer;
           timer = TempTimer;
           StartTimer = 1;
@@ -164,7 +177,10 @@ void GameMenu(RenderWindow& window)
       }
 
       for (int i = 0; i < 9; ++i) {
+        if (tm > 3)
           TimerNumbersSprite[i].setColor(Color::Black);
+        else
+          TimerNumbersSprite[i].setColor(Color::Red);
       }
 
       if (SumRightLettersSelectPlayer == CountRightLetters || SummMistakes == CountPossibleMistakes)
@@ -218,6 +234,7 @@ void GameMenu(RenderWindow& window)
       {
           window.draw(GameBackground_defeat);
           window.draw(DefeatSprite);
+          Last10Sec.stop();
       }
 
       for (int i = 0; i < NUMBERLETTERS; ++i) {

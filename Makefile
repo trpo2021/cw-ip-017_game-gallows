@@ -34,7 +34,7 @@ test: $(TEST_PATH)
 -include $(DEPS)
 
 $(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
-	$(CXX) $(CPPFLAGS) $^ -o $@ -L SFML/lib -lsfml-graphics -lsfml-window -lsfml-system $(LDFLAGS) $(LDLIBS)
+	$(CXX) $(CPPFLAGS) $^ -o $@ -L SFML/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio $(LDFLAGS) $(LDLIBS)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
 	$(CXX) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
