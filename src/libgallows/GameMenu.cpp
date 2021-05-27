@@ -108,6 +108,7 @@ void GameMenu(RenderWindow& window)
     VictorySprite.setTexture(VictoryTexture);
     VictorySprite.setPosition(200, 100);
 
+    bool isGameOver = 0;
     bool isGameMenu = 1;
     int LetterNum = -1;
     bool Markers[NUMBERLETTERS] = { 0 };
@@ -129,43 +130,49 @@ void GameMenu(RenderWindow& window)
             WordSprite[i].setColor(Color::Black);
         }
 
-        for (int i = 0; i < 32; ++i)
+        if (ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE) == CountRightLetters || SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE) == 5)
+            isGameOver = 1;
+
+        if (isGameOver == 0)
         {
-            if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
+            for (int i = 0; i < 32; ++i)
             {
-                AlphabetSprite[i].setColor(sf::Color::Blue);
-                (LetterNum) = i;
-            }
-            RowAlphabetX += 50;
-            if (i == 12)
-            {
-                RowAlphabetX = StartRowAlphabetX;
-                RowAlphabetY += 80;
-            }
-            else if (i == 25)
-            {
-                RowAlphabetX = StartRowAlphabetX + 150;
-                RowAlphabetY += 80;
-            }
-        }
-        RowAlphabetX = StartRowAlphabetX;
-        RowAlphabetY = StartRowAlphabetY;
-
-        if (Mouse::isButtonPressed(Mouse::Left))
-            for (int i = 0; i < NUMBERLETTERS; ++i)
-                if (LetterNum == i) {
-                    Markers[i] = 1;
-                    for (int j = 0; j < WORDSIZE; ++j)
-                        if (IndexWord[j] == i)
-                            WordLetter[j] = 1;
+                if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
+                {
+                    AlphabetSprite[i].setColor(sf::Color::Blue);
+                    (LetterNum) = i;
                 }
+                RowAlphabetX += 50;
+                if (i == 12)
+                {
+                    RowAlphabetX = StartRowAlphabetX;
+                    RowAlphabetY += 80;
+                }
+                else if (i == 25)
+                {
+                    RowAlphabetX = StartRowAlphabetX + 150;
+                    RowAlphabetY += 80;
+                }
+            }
+            RowAlphabetX = StartRowAlphabetX;
+            RowAlphabetY = StartRowAlphabetY;
 
-        for (int i = 0; i < NUMBERLETTERS; ++i) {
-            if (Markers[i] == 1) {
-                if (CheckLetter(word, WORDSIZE, i))
-                    MarkerSprite[i].setColor(Color::Green);
-                else
-                    MarkerSprite[i].setColor(Color::Red);
+            if (Mouse::isButtonPressed(Mouse::Left))
+                for (int i = 0; i < NUMBERLETTERS; ++i)
+                    if (LetterNum == i) {
+                        Markers[i] = 1;
+                        for (int j = 0; j < WORDSIZE; ++j)
+                            if (IndexWord[j] == i)
+                                WordLetter[j] = 1;
+                    }
+
+            for (int i = 0; i < NUMBERLETTERS; ++i) {
+                if (Markers[i] == 1) {
+                    if (CheckLetter(word, WORDSIZE, i))
+                        MarkerSprite[i].setColor(Color::Green);
+                    else
+                        MarkerSprite[i].setColor(Color::Red);
+                }
             }
         }
 
