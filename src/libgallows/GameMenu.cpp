@@ -9,10 +9,13 @@ using namespace std;
 
 void GameMenu(RenderWindow& window)
 {
-    string word = "KUKUSKA";
-    const int CountPossibleMistakes = 6;
-    const int WORDSIZE = 7;
-    int CountRightLetters = 4;
+    string theme, word;
+    Theme_Word(theme, word);
+
+    int CountPossibleMistakes = 6;
+    int WORDSIZE = word.length();
+    int CountRightLetters;
+    non_repeating_characters(WORDSIZE, CountRightLetters, word);
     const int NUMBERLETTERS = 32; // Количество букв в алфавите
 
   int IndexWord[WORDSIZE];
