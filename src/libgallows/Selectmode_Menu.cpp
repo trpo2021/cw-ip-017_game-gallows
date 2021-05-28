@@ -1,9 +1,15 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "menu.h"
 using namespace sf;
 
 void SelectmodeMenu(RenderWindow& window)
 {
+    Music MenuMusic;
+    MenuMusic.openFromFile("Music/MenuMusic.wav");
+    MenuMusic.setVolume(15.f);
+    MenuMusic.play();
+
     Texture easyTexture, mediumTexture, hardTexture, Selectbackground,
             model1Texture, model2Texture, model3Texture;
     easyTexture.loadFromFile("Images/easy.png");
@@ -50,14 +56,17 @@ void SelectmodeMenu(RenderWindow& window)
         }
         if (Mouse::isButtonPressed(Mouse::Left)) {
             if (Selectnum == 1) {
+                MenuMusic.stop();
                 GameMenu(window);
                 isSelect = false;
             }
             if (Selectnum == 2) {
+                MenuMusic.stop();
                 GameMenu(window);
                 isSelect = false;
             }
             if (Selectnum == 3) {
+                MenuMusic.stop();
                 GameMenu(window);
                 isSelect = false;
             }

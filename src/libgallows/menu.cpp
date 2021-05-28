@@ -1,9 +1,16 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "menu.h"
+#include "functions.h"
 using namespace sf;
 
 void MainMenu(RenderWindow& window)
 {
+    Music MenuMusic;
+    MenuMusic.openFromFile("Music/MenuMusic.wav");
+    MenuMusic.setVolume(15.f);
+    MenuMusic.play();
+
     Texture MenuStartTexture, MenuExitTexture, MenuTexture;
     MenuStartTexture.loadFromFile("Images/start.png");
     MenuExitTexture.loadFromFile("Images/exit.png");
@@ -40,6 +47,7 @@ void MainMenu(RenderWindow& window)
         if (Mouse::isButtonPressed(Mouse::Left)) {
             if (MenuNum == 1) {
                 isMenu = false;
+                MenuMusic.stop();
                 SelectmodeMenu(window);
             }
             if (MenuNum == 2) {

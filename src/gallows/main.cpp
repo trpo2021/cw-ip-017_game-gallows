@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-//#include "C:\Users\petru\source\repos\cw-ip-017_game-gallows\src\libgallows\menu.h"
 #include <libgallows\menu.h>
 using namespace sf;
 
