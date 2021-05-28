@@ -6,4 +6,4 @@ void FillingIndexArray(std::string word, int WORDSIZE, int NUMBERLETTERS, int* I
 int SumMistakes(bool* Markers, std::string word, int NUMBERLETTERS, int WORDSIZE);
 int ManYouRight(bool* Markers, std::string word, int NUMBERLETTERS, int WORDSIZE);
 void Theme_Word(std::string& tema, std::string& word);
-void non_repeating_characters(int amount, int& non_repeating, std::string word);
+int non_repeating_characters(int amount, std::string word);

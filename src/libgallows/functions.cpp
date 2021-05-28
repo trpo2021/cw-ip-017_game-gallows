@@ -1,51 +1,51 @@
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include "functions.h"
 #include <string>
 #include <iostream>
 using namespace sf;
+using namespace std;
 
-std::string alphabet = "AFFFFFFFFFKFFFFFFFFUFFFFSFFFFFFF";
-//std::string alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+std::string alphabet = "ABVGDEJZIyKLMNOPRSTYFXC4HmhuieUa";
 
-void FillingIndexArray(std::string word, int WORDSIZE, int NUMBERLETTERS, int* IndexWord) {
-	for (int i = 0; i < WORDSIZE; ++i)
-		for (int j = 0; j < NUMBERLETTERS; ++j)
-			if (word[i] == alphabet[j])
-				IndexWord[i] = j;
+void FillingIndexArray(string word, int WORDSIZE, int NUMBERLETTERS, int* IndexWord) {
+    for (int i = 0; i < WORDSIZE; ++i)
+        for (int j = 0; j < NUMBERLETTERS; ++j)
+            if (word[i] == alphabet[j])
+                IndexWord[i] = j;
 }
-int CheckLetter(std::string word, int WORDSIZE, int a) {
-	for (int i = 0; i < WORDSIZE; ++i) {
-		if (alphabet[a] == word[i])
-			return 1;
-	}
-	return 0;
+int CheckLetter(string word, int WORDSIZE, int a) {
+    for (int i = 0; i < WORDSIZE; ++i) {
+        if (alphabet[a] == word[i])
+            return 1;
+    }
+    return 0;
 }
-int SumMistakes(bool* Markers, std::string word, int NUMBERLETTERS, int WORDSIZE) {
-	int s = -1;
-	for (int i = 0; i < NUMBERLETTERS; ++i) {
-		if (!CheckLetter(word, WORDSIZE, i))
-			s += Markers[i];
-	}
-	return s;
+int SumMistakes(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
+    int s = -1;
+    for (int i = 0; i < NUMBERLETTERS; ++i) {
+        if (!CheckLetter(word, WORDSIZE, i))
+            s += Markers[i];
+    }
+    return s;
 }
-int ManYouRight(bool* Markers, std::string word, int NUMBERLETTERS, int WORDSIZE) {
-	int s = 0;
-	for (int i = 0; i < NUMBERLETTERS; ++i) {
-		if (CheckLetter(word, WORDSIZE, i))
-			s += Markers[i];
-	}
-	return s;
+int ManYouRight(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
+    int s = 0;
+    for (int i = 0; i < NUMBERLETTERS; ++i) {
+        if (CheckLetter(word, WORDSIZE, i))
+            s += Markers[i];
+    }
+    return s;
 }
 void Theme_Word(string& tema, string& word)
 {
     string path[5]
-            = {"ARXITEKTYRA.txt",
-               "JIVOTNuE.txt",
-               "EDA.txt",
-               "RASTENIa.txt",
-               "TRANSPORT.txt"};
-    int k;
-    k = rand() % 5;
+        = { "Words/ARXITEKTYRA.txt",
+           "Words/JIVOTNuE.txt",
+           "Words/EDA.txt",
+           "Words/RASTENIa.txt",
+           "Words/TRANSPORT.txt" };
+    int k = rand() % 5;
     switch (k) {
     case 0:
         tema = "ARXITEKTYRA";
@@ -61,6 +61,14 @@ void Theme_Word(string& tema, string& word)
 
     ifstream fin;
     fin.open(path[k]);
+    if (!fin.is_open())
+    {
+      cout << "ERROR OPEN FILE!" << endl;
+    }
+    else
+    {
+      cout << "File is open" << endl;
+    }
 
     string str[11];
     k = rand() % 11;
@@ -72,8 +80,9 @@ void Theme_Word(string& tema, string& word)
     fin.close();
     word = str[k];
 }
-void non_repeating_characters(int amount, int& non_repeating, string word)
+int non_repeating_characters(int amount, string word)
 {
+    int non_repeating = 0;
     string outw; // Слово-контейнер (в него помещаются все неповторяющиеся
                  // символы)
     bool flag = false; // Флаг повтора
@@ -90,4 +99,5 @@ void non_repeating_characters(int amount, int& non_repeating, string word)
             non_repeating = outw.length();
         }
     }
+    return non_repeating;
 }
