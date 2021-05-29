@@ -3,4 +3,4 @@
 
 void MainMenu(sf::RenderWindow& window); // Главное меню
 void SelectmodeMenu(sf::RenderWindow& window); // Меню выбора сложности
-void GameMenu(sf::RenderWindow& window); // Игровое меню
+void GameMenu(sf::RenderWindow& window, int Selectnum); // Игровое меню
