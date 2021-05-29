@@ -80,13 +80,13 @@ void Theme_Word(string& tema, string& word)
     fin.close();
     word = str[k];
 }
-int non_repeating_characters(int amount, string word)
+int non_repeating_characters(int WORDSIZE, string word)
 {
     int non_repeating = 0;
     string outw; // Слово-контейнер (в него помещаются все неповторяющиеся
                  // символы)
     bool flag = false; // Флаг повтора
-    for (int i = 0; i < amount; i++) {
+    for (int i = 0; i < WORDSIZE; i++) {
         flag = false;
         for (int j = 0; j < non_repeating; j++) {
             if (word[i] == outw[j]) {
