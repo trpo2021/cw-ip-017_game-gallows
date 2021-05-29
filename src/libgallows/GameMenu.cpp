@@ -13,7 +13,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     srand(time(NULL));
     string theme, word;
     Theme_Word(theme, word);
-
+    int rand_letter;
     const int CountPossibleMistakes = 6;
     int WORDSIZE = word.length();
     int Themewordsize = theme.length();
@@ -25,6 +25,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     int* IndexWord = new int[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
     FillingIndexArray(theme, Themewordsize, NUMBERLETTERS, IndexTheme);
+    rand_letter = rand() % WORDSIZE;
     Music GameMusic;
     GameMusic.openFromFile("Music/GameMenuMusic.wav");
     GameMusic.setVolume(15.f);
@@ -70,7 +71,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         PartsGallowsSprite[i].setTextureRect(
                 IntRect(CutImageXPartsGallows, 1, 241, 398));
         PartsGallowsSprite[i].setPosition(800, 240);
-        if (i != 4)
+       
             CutImageXPartsGallows += 242;
     }
 
@@ -148,6 +149,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     bool isGameMenu = 1;
     int LetterNum = -1;
     bool Markers[NUMBERLETTERS] = {0};
+    Markers[IndexWord[rand_letter]] = 1;
     bool* WordLetter = new bool[WORDSIZE];
     for (int i = 0; i < WORDSIZE; ++i)
         WordLetter[i] = 0;
@@ -165,9 +167,13 @@ void GameMenu(RenderWindow& window, int Selectnum)
                 window.close();
 
         LetterNum = -1;
-
+        
         SumRightLettersSelectPlayer
                 = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
+        if (Selectnum == 1) {
+            SumRightLettersSelectPlayer++;
+            WordLetter[rand_letter]=1;
+        }
 
         if (tm != 0)
             SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
@@ -273,8 +279,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         if (SummMistakes < CountPossibleMistakes
             && SumRightLettersSelectPlayer < CountRightLetters) {
             if (Selectnum == 1) {
-                window.draw(WordSprite[0]);
-                window.draw(WordSprite[WORDSIZE - 1]);
+               
                 for (int i = 0; i < Themewordsize; i++)
                     window.draw(ThemeSprite[i]);
             }
