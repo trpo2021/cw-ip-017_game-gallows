@@ -249,7 +249,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
         else {
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);
-            Last10Sec.stop();
         }
 
         for (int i = 0; i < NUMBERLETTERS; ++i) {
@@ -268,24 +267,28 @@ void GameMenu(RenderWindow& window, int Selectnum)
             if (Markers[i])
                 window.draw(MarkerSprite[i]);
 
-        if (Selectnum == 1) {
-            window.draw(WordSprite[0]);
-            window.draw(WordSprite[WORDSIZE - 1]);
-            for (int i = 0; i < Themewordsize; i++)
-                window.draw(ThemeSprite[i]);
-        }
-        if (Selectnum == 2)
-            for (int i = 0; i < Themewordsize; i++)
-                window.draw(ThemeSprite[i]);
+
+        
 
         if (SummMistakes < CountPossibleMistakes
-            && SumRightLettersSelectPlayer < CountRightLetters)
+            && SumRightLettersSelectPlayer < CountRightLetters) {
+            if (Selectnum == 1) {
+                window.draw(WordSprite[0]);
+                window.draw(WordSprite[WORDSIZE - 1]);
+                for (int i = 0; i < Themewordsize; i++)
+                    window.draw(ThemeSprite[i]);
+            }
+            if (Selectnum == 2)
+
+                for (int i = 0; i < Themewordsize; i++)
+                    window.draw(ThemeSprite[i]);
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
                 if (WordLetter[i])
                     window.draw(WordSprite[i]);
             }
+        }
 
         if (SummMistakes == CountPossibleMistakes - 1 && tm != 0 && tm != 10) {
             window.draw(TimerNumbersSprite[tm - 1]);
