@@ -3,6 +3,7 @@
 #include "functions.h"
 #include <string>
 #include <iostream>
+#include <ctime>
 using namespace sf;
 using namespace std;
 
@@ -39,24 +40,31 @@ int ManYouRight(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
 }
 void Theme_Word(string& tema, string& word)
 {
+    srand(time(NULL));
     string path[5]
         = { "Words/ARXITEKTYRA.txt",
            "Words/JIVOTNuE.txt",
            "Words/EDA.txt",
            "Words/RASTENIa.txt",
            "Words/TRANSPORT.txt" };
-    int k = rand() % 5;
+    int k;
+    k = rand() % 5;
     switch (k) {
     case 0:
         tema = "ARXITEKTYRA";
+        break;
     case 1:
         tema = "JIVOTNuE";
+        break;
     case 2:
         tema = "EDA";
+        break;
     case 3:
         tema = "RASTENIa";
+        break;
     case 4:
         tema = "TRANSPORT";
+        break;
     }
 
     ifstream fin;

@@ -1,27 +1,31 @@
 #include "functions.h"
 #include "menu.h"
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <ctime>
 #include <iostream>
 #include <string>
-#include <ctime>
 using namespace sf;
 using namespace std;
 
-void GameMenu(RenderWindow& window)
+void GameMenu(RenderWindow& window, int Selectnum)
 {
     srand(time(NULL));
     string theme, word;
     Theme_Word(theme, word);
+    int rand_letter;
     const int CountPossibleMistakes = 6;
     int WORDSIZE = word.length();
+    int Themewordsize = theme.length();
+    int* IndexTheme = new int[Themewordsize];
     int CountRightLetters;
     CountRightLetters = non_repeating_characters(WORDSIZE, word);
     const int NUMBERLETTERS = 32; // Количество букв в алфавите
 
     int* IndexWord = new int[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
-
+    FillingIndexArray(theme, Themewordsize, NUMBERLETTERS, IndexTheme);
+    rand_letter = rand() % WORDSIZE;
     Music GameMusic;
     GameMusic.openFromFile("Music/GameMenuMusic.wav");
     GameMusic.setVolume(15.f);
@@ -32,9 +36,10 @@ void GameMenu(RenderWindow& window)
     Last10Sec.setVolume(5.f);
 
     Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
-        WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
-        PartsGallowsTexture, TimerNumbersTexture;
-    GameMenuDefeatTexture.loadFromFile("Images/Background_in_the_game_defeat.jpg");
+            WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
+            PartsGallowsTexture, TimerNumbersTexture;
+    GameMenuDefeatTexture.loadFromFile(
+            "Images/Background_in_the_game_defeat.jpg");
     GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
     AlphabetTexture.loadFromFile("Images/alphavite.png");
     cell_file.loadFromFile("Images/cell.jpg");
@@ -47,10 +52,10 @@ void GameMenu(RenderWindow& window)
 
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
-    for (int i = 0; i < 9; ++i)
-    {
+    for (int i = 0; i < 9; ++i) {
         TimerNumbersSprite[i].setTexture(TimerNumbersTexture);
-        TimerNumbersSprite[i].setTextureRect(IntRect(CutImageXPartsTimerNumbers, 1, 54, 98));
+        TimerNumbersSprite[i].setTextureRect(
+                IntRect(CutImageXPartsTimerNumbers, 1, 54, 98));
         TimerNumbersSprite[i].setPosition(1050, 730);
         CutImageXPartsTimerNumbers += 55;
     }
@@ -61,17 +66,17 @@ void GameMenu(RenderWindow& window)
 
     Sprite PartsGallowsSprite[CountPossibleMistakes];
     int CutImageXPartsGallows = 1;
-    for (int i = 0; i < CountPossibleMistakes; ++i)
-    {
+    for (int i = 0; i < CountPossibleMistakes; ++i) {
         PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
-        PartsGallowsSprite[i].setTextureRect(IntRect(CutImageXPartsGallows, 1, 241, 398));
+        PartsGallowsSprite[i].setTextureRect(
+                IntRect(CutImageXPartsGallows, 1, 241, 398));
         PartsGallowsSprite[i].setPosition(800, 240);
-        if (i != 4)
+       
             CutImageXPartsGallows += 242;
     }
 
     Sprite GameBackground(GameMenuTexture),
-        GameBackground_defeat(GameMenuDefeatTexture);
+            GameBackground_defeat(GameMenuDefeatTexture);
     GameBackground.setPosition(0, 0);
     GameBackground_defeat.setPosition(0, 0);
     Sprite AlphabetSprite[NUMBERLETTERS];
@@ -82,7 +87,7 @@ void GameMenu(RenderWindow& window)
         CutImageX += 53;
     }
 
-    Sprite *MarkerSprite = new Sprite[NUMBERLETTERS];
+    Sprite* MarkerSprite = new Sprite[NUMBERLETTERS];
     for (int i = 0; i < NUMBERLETTERS; ++i) {
         MarkerSprite[i].setTexture(MarkerTexture);
         if (CheckLetter(word, WORDSIZE, i))
@@ -93,18 +98,14 @@ void GameMenu(RenderWindow& window)
 
     int StartRowAlphabetX = 250, StartRowAlphabetY = 700;
     int RowAlphabetX = StartRowAlphabetX, RowAlphabetY = StartRowAlphabetY;
-    for (int i = 0; i < 32; ++i)
-    {
+    for (int i = 0; i < 32; ++i) {
         AlphabetSprite[i].setPosition(RowAlphabetX, RowAlphabetY);
         MarkerSprite[i].setPosition(RowAlphabetX, RowAlphabetY + 5);
         RowAlphabetX += 50;
-        if (i == 12)
-        {
+        if (i == 12) {
             RowAlphabetX = StartRowAlphabetX;
             RowAlphabetY += 80;
-        }
-        else if (i == 25)
-        {
+        } else if (i == 25) {
             RowAlphabetX = StartRowAlphabetX + 150;
             RowAlphabetY += 80;
         }
@@ -118,7 +119,18 @@ void GameMenu(RenderWindow& window)
         WordSprite[i].setTexture(WordImage);
         WordSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
     }
-
+    CutImageX = 3;
+    Sprite* ThemeSprite = new Sprite[Themewordsize];
+    for (int i = 0; i < Themewordsize; i++) {
+        CutImageX = 53 * (IndexTheme[i] + 1) - 53 + 3;
+        ThemeSprite[i].setTexture(WordImage);
+        ThemeSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
+    }
+    int Theme_Letter_positionX = 420;
+    for (int i = 0; i < Themewordsize; i++) {
+        ThemeSprite[i].setPosition(Theme_Letter_positionX, 160);
+        Theme_Letter_positionX += 35;
+    }
     Sprite* CellSprite = new Sprite[WORDSIZE];
     for (int i = 0; i < WORDSIZE; i++)
         CellSprite[i].setTexture(cell_file);
@@ -136,7 +148,8 @@ void GameMenu(RenderWindow& window)
     bool isGameOver = 0;
     bool isGameMenu = 1;
     int LetterNum = -1;
-    bool Markers[NUMBERLETTERS] = { 0 };
+    bool Markers[NUMBERLETTERS] = {0};
+    Markers[IndexWord[rand_letter]] = 1;
     bool* WordLetter = new bool[WORDSIZE];
     for (int i = 0; i < WORDSIZE; ++i)
         WordLetter[i] = 0;
@@ -154,8 +167,13 @@ void GameMenu(RenderWindow& window)
                 window.close();
 
         LetterNum = -1;
-
-        SumRightLettersSelectPlayer = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
+        
+        SumRightLettersSelectPlayer
+                = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
+        if (Selectnum == 1) {
+            SumRightLettersSelectPlayer++;
+            WordLetter[rand_letter]=1;
+        }
 
         if (tm != 0)
             SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
@@ -163,21 +181,23 @@ void GameMenu(RenderWindow& window)
             SummMistakes++;
         }
 
-        if (StartTimer == 0 && SummMistakes == CountPossibleMistakes - 1)
-        {
+        if (StartTimer == 0 && SummMistakes == CountPossibleMistakes - 1) {
             GameMusic.stop();
             Last10Sec.play();
             Clock TempTimer;
             timer = TempTimer;
             StartTimer = 1;
         }
-        if (SummMistakes == (CountPossibleMistakes - 1) && tm != 0 && SumRightLettersSelectPlayer < CountRightLetters)
+        if (SummMistakes == (CountPossibleMistakes - 1) && tm != 0
+            && SumRightLettersSelectPlayer < CountRightLetters)
             tm = 10 - timer.getElapsedTime().asSeconds();
 
         for (int i = 0; i < NUMBERLETTERS; ++i) {
             AlphabetSprite[i].setColor(Color::Black);
         }
-
+        for (int i = 0; i < Themewordsize; i++) {
+            ThemeSprite[i].setColor(Color::Black);
+        }
         for (int i = 0; i < WORDSIZE; ++i) {
             WordSprite[i].setColor(Color::Black);
         }
@@ -189,25 +209,21 @@ void GameMenu(RenderWindow& window)
                 TimerNumbersSprite[i].setColor(Color::Red);
         }
 
-        if (SumRightLettersSelectPlayer == CountRightLetters || SummMistakes == CountPossibleMistakes)
+        if (SumRightLettersSelectPlayer == CountRightLetters
+            || SummMistakes == CountPossibleMistakes)
             isGameOver = 1;
-        if (isGameOver == 0)
-        {
-            for (int i = 0; i < 32; ++i)
-            {
-                if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60).contains(Mouse::getPosition(window)))
-                {
+        if (isGameOver == 0) {
+            for (int i = 0; i < 32; ++i) {
+                if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
+                            .contains(Mouse::getPosition(window))) {
                     AlphabetSprite[i].setColor(sf::Color::Blue);
                     (LetterNum) = i;
                 }
                 RowAlphabetX += 50;
-                if (i == 12)
-                {
+                if (i == 12) {
                     RowAlphabetX = StartRowAlphabetX;
                     RowAlphabetY += 80;
-                }
-                else if (i == 25)
-                {
+                } else if (i == 25) {
                     RowAlphabetX = StartRowAlphabetX + 150;
                     RowAlphabetY += 80;
                 }
@@ -236,11 +252,9 @@ void GameMenu(RenderWindow& window)
 
         if (SummMistakes < CountPossibleMistakes)
             window.draw(GameBackground);
-        else
-        {
+        else {
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);
-            Last10Sec.stop();
         }
 
         for (int i = 0; i < NUMBERLETTERS; ++i) {
@@ -251,23 +265,37 @@ void GameMenu(RenderWindow& window)
             window.draw(VictorySprite);
         }
 
-        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes && SumRightLettersSelectPlayer < CountRightLetters)
+        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes
+            && SumRightLettersSelectPlayer < CountRightLetters)
             window.draw(PartsGallowsSprite[SummMistakes]);
 
         for (int i = 0; i < NUMBERLETTERS; ++i)
             if (Markers[i])
                 window.draw(MarkerSprite[i]);
 
-        if (SummMistakes < CountPossibleMistakes && SumRightLettersSelectPlayer < CountRightLetters)
+
+        
+
+        if (SummMistakes < CountPossibleMistakes
+            && SumRightLettersSelectPlayer < CountRightLetters) {
+            if (Selectnum == 1) {
+               
+                for (int i = 0; i < Themewordsize; i++)
+                    window.draw(ThemeSprite[i]);
+            }
+            if (Selectnum == 2)
+
+                for (int i = 0; i < Themewordsize; i++)
+                    window.draw(ThemeSprite[i]);
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
                 if (WordLetter[i])
                     window.draw(WordSprite[i]);
             }
+        }
 
-        if (SummMistakes == CountPossibleMistakes - 1 && tm != 0 && tm != 10)
-        {
+        if (SummMistakes == CountPossibleMistakes - 1 && tm != 0 && tm != 10) {
             window.draw(TimerNumbersSprite[tm - 1]);
         }
         window.display();
@@ -278,4 +306,5 @@ void GameMenu(RenderWindow& window)
     delete[] CellSprite;
     delete[] WordLetter;
     delete[] MarkerSprite;
+    delete[] IndexTheme;
 }

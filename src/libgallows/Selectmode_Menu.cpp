@@ -57,17 +57,17 @@ void SelectmodeMenu(RenderWindow& window)
         if (Mouse::isButtonPressed(Mouse::Left)) {
             if (Selectnum == 1) {
                 MenuMusic.stop();
-                GameMenu(window);
+                GameMenu(window,Selectnum);
                 isSelect = false;
             }
             if (Selectnum == 2) {
                 MenuMusic.stop();
-                GameMenu(window);
+                GameMenu(window, Selectnum);
                 isSelect = false;
             }
             if (Selectnum == 3) {
                 MenuMusic.stop();
-                GameMenu(window);
+                GameMenu(window, Selectnum);
                 isSelect = false;
             }
         }
