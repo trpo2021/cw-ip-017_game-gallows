@@ -38,27 +38,46 @@ TEST_CASE("SumMistakes")
             = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1,
                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
     REQUIRE(SumMistakes(Markers3, word, NUMBERLETTERS, WORDSIZE) == 1);
+
+    bool Markers4[NUMBERLETTERS]
+            = {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+               1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1};
+    REQUIRE(SumMistakes(Markers4, word, NUMBERLETTERS, WORDSIZE) == 5);
 }
 TEST_CASE("ManYouRight")
 {
     std::string word = "ANTILOPA";
     int WORDSIZE = 8;
     int NUMBERLETTERS = 31;
-    bool Markers1[NUMBERLETTERS]
+    bool Markers0[NUMBERLETTERS]
             = {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1,
                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    REQUIRE(ManYouRight(Markers1, word, NUMBERLETTERS, WORDSIZE) == 7);
+    REQUIRE(ManYouRight(Markers0, word, NUMBERLETTERS, WORDSIZE) == 7);
 
-    bool Markers2[NUMBERLETTERS]
+    bool Markers1[NUMBERLETTERS]
             = {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1,
                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    REQUIRE(ManYouRight(Markers2, word, NUMBERLETTERS, WORDSIZE) == 6);
+    REQUIRE(ManYouRight(Markers1, word, NUMBERLETTERS, WORDSIZE) == 6);
 
-    bool Markers3[NUMBERLETTERS]
+    bool Markers2[NUMBERLETTERS]
             = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1,
                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
-    REQUIRE(ManYouRight(Markers3, word, NUMBERLETTERS, WORDSIZE) == 5);
+    REQUIRE(ManYouRight(Markers2, word, NUMBERLETTERS, WORDSIZE) == 5);
+
+    bool Markers3[NUMBERLETTERS]
+            = {1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,
+               0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    REQUIRE(ManYouRight(Markers3, word, NUMBERLETTERS, WORDSIZE) == 4);
+
+    bool Markers4[NUMBERLETTERS]
+            = {0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+               1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
+
+    REQUIRE(ManYouRight(Markers4, word, NUMBERLETTERS, WORDSIZE) == 1);
+
+
 }
 
 TEST_CASE("non_repeating_characters")
