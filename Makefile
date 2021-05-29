@@ -34,25 +34,25 @@ test: $(TEST_PATH)
 -include $(DEPS)
 
 $(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
-$(CXX) $(CPPFLAGS) $^ -o $@ -L bin -lsfml-graphics-d-2 -lsfml-window-d-2 -lsfml-system-d-2 -lsfml-audio-d-2 $(LDFLAGS) $(LDLIBS)
+	$(CXX) $(CPPFLAGS) $^ -o $@ -L bin -lsfml-graphics-d-2 -lsfml-window-d-2 -lsfml-system-d-2 -lsfml-audio-d-2 $(LDFLAGS) $(LDLIBS)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
-$(CXX) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+	$(CXX) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 $(LIB_PATH): $(LIB_OBJECTS)
-ar rcs $@ $^
+	ar rcs $@ $^
 
 $(OBJ_DIR)/$(SRC_DIR)/$(APP_NAME)/%.o: $(SRC_DIR)/$(APP_NAME)/%.cpp
-$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS) -I SFML/include
+	$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS) -I SFML/include
 
 $(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.cpp
-$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS)
+	$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS)
 
 $(OBJ_DIR)/$(SRC_DIR)/$(LIB_NAME)/%.o: $(SRC_DIR)/$(LIB_NAME)/%.cpp
-$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS) -I SFML/include
+	$(CXX) -c $(CPPFLAGS) $< -o $@ $(LDLIBS) -I SFML/include
 
 .PHONY: clean
 clean:
-$(RM) $(APP_PATH) $(LIB_PATH) $(TEST_PATH)
-find $(OBJ_DIR) -name '*.o' -exec $(RM) '{}' \;
-find $(OBJ_DIR) -name '*.d' -exec $(RM) '{}' \;
+	$(RM) $(APP_PATH) $(LIB_PATH) $(TEST_PATH)
+	find $(OBJ_DIR) -name '*.o' -exec $(RM) '{}' \;
+	find $(OBJ_DIR) -name '*.d' -exec $(RM) '{}' \;
