@@ -12,10 +12,11 @@ using namespace std;
 void GameMenu(RenderWindow& window, int Selectnum)
 {
     //srand(time(NULL));
-    string theme, word;
-    Theme_Word(theme, word);
+    string theme = "EDA", word = "ANANAS";
+    //Theme_Word(theme, word);
     cout << word;
-    int rand_letter;
+    int rand_letter = 0;
+    //int rand_letter = rand() % WORDSIZE;
     const int CountPossibleMistakes = 6;
     int WORDSIZE = word.length();
     int Themewordsize = theme.length();
@@ -27,7 +28,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
     int* IndexWord = new int[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
     FillingIndexArray(theme, Themewordsize, NUMBERLETTERS, IndexTheme);
-    rand_letter = rand() % WORDSIZE;
     Music GameMusic;
     GameMusic.openFromFile("Music/GameMenuMusic.wav");
     GameMusic.setVolume(15.f);
@@ -164,22 +164,25 @@ void GameMenu(RenderWindow& window, int Selectnum)
     bool isGameMenu = 1;
     int LetterNum = -1;
     bool Markers[NUMBERLETTERS] = {0};
-    Markers[IndexWord[rand_letter]] = 1;
+    int SummMistakes = -1;
+    int SumRightLettersSelectPlayer = 0;
+
     bool* WordLetter = new bool[WORDSIZE];
     for (int i = 0; i < WORDSIZE; ++i)
         WordLetter[i] = 0;
-    int SummMistakes = -1;
-    int SumRightLettersSelectPlayer = 0;
+    if (Selectnum == 1) {
+        Markers[IndexWord[rand_letter]] = 1;
+        SumRightLettersSelectPlayer++;
+        for (int j = 0; j < WORDSIZE; ++j)
+            if (IndexWord[j] == rand_letter)
+                WordLetter[j] = 1;
+    }
 
     Clock timer;
     int tm = 10;
     bool StartTimer = 0;
     int state = 0;
 
-    if (Selectnum == 1) {
-        SumRightLettersSelectPlayer++;
-        WordLetter[rand_letter] = 1;
-    }
     SoundBuffer shotBuffer;
     shotBuffer.loadFromFile("Music/Shot_sound.wav");
     Sound shoot;
