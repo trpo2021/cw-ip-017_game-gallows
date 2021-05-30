@@ -5,14 +5,16 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <Windows.h>
 using namespace sf;
 using namespace std;
 
 void GameMenu(RenderWindow& window, int Selectnum)
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     string theme, word;
     Theme_Word(theme, word);
+    cout << word;
     int rand_letter;
     const int CountPossibleMistakes = 6;
     int WORDSIZE = word.length();
@@ -35,13 +37,19 @@ void GameMenu(RenderWindow& window, int Selectnum)
     Last10Sec.openFromFile("Music/Last10sec.wav");
     Last10Sec.setVolume(5.f);
 
-    Texture GameMenuTexture, AlphabetTexture, cell_file, MarkerTexture,
+    Texture GameMenuTexture, GameMenuTexture_victory0, GameMenuTexture_victory1,
+            GameMenuTexture_victory2 ,AlphabetTexture, cell_file,
+            MarkerTexture,
             WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
-            PartsGallowsTexture, TimerNumbersTexture;
+            PartsGallowsTexture,
+            TimerNumbersTexture;
     GameMenuDefeatTexture.loadFromFile(
             "Images/Background_in_the_game_defeat.jpg");
     GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
     AlphabetTexture.loadFromFile("Images/alphavite.png");
+    GameMenuTexture_victory0.loadFromFile("Images/four_mistakes.jpg");
+    GameMenuTexture_victory1.loadFromFile("Images/Victory_animation.jpg");
+    GameMenuTexture_victory2.loadFromFile("Images/victory.jpg");
     cell_file.loadFromFile("Images/cell.jpg");
     MarkerTexture.loadFromFile("Images/markers.png");
     WordImage.loadFromFile("Images/alphavite.png");
@@ -56,7 +64,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         TimerNumbersSprite[i].setTexture(TimerNumbersTexture);
         TimerNumbersSprite[i].setTextureRect(
                 IntRect(CutImageXPartsTimerNumbers, 1, 54, 98));
-        TimerNumbersSprite[i].setPosition(1050, 730);
+        TimerNumbersSprite[i].setPosition(1080, 530);
         CutImageXPartsTimerNumbers += 55;
     }
 
@@ -64,20 +72,27 @@ void GameMenu(RenderWindow& window, int Selectnum)
     DefeatSprite.setTexture(DefeatTexture);
     DefeatSprite.setPosition(65, 100);
 
-    Sprite PartsGallowsSprite[CountPossibleMistakes];
+    Sprite PartsGallowsSprite[CountPossibleMistakes-1];
     int CutImageXPartsGallows = 1;
-    for (int i = 0; i < CountPossibleMistakes; ++i) {
+    for (int i = 0; i < CountPossibleMistakes-1; ++i) {
         PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
         PartsGallowsSprite[i].setTextureRect(
                 IntRect(CutImageXPartsGallows, 1, 241, 398));
         PartsGallowsSprite[i].setPosition(800, 240);
-       
+ 
             CutImageXPartsGallows += 242;
     }
 
     Sprite GameBackground(GameMenuTexture),
-            GameBackground_defeat(GameMenuDefeatTexture);
+            GameBackground_defeat(GameMenuDefeatTexture),
+            GameBackground_victory[3];
     GameBackground.setPosition(0, 0);
+    GameBackground_victory[0].setTexture(GameMenuTexture_victory0);
+    GameBackground_victory[1].setTexture(GameMenuTexture_victory1);
+    GameBackground_victory[2].setTexture(GameMenuTexture_victory2);
+    for (int  i = 0; i < 3; i++) {
+        GameBackground_victory[i].setPosition(0, 0);
+    }
     GameBackground_defeat.setPosition(0, 0);
     Sprite AlphabetSprite[NUMBERLETTERS];
     int CutImageX = 3; // Координата, с которой нужно начать вырезать буквы
@@ -159,8 +174,19 @@ void GameMenu(RenderWindow& window, int Selectnum)
     Clock timer;
     int tm = 10;
     bool StartTimer = 0;
+    int state = 0;
 
+    if (Selectnum == 1) {
+        SumRightLettersSelectPlayer++;
+        WordLetter[rand_letter] = 1;
+    }
+    SoundBuffer shotBuffer;
+    shotBuffer.loadFromFile("Music/Shot_sound.wav");
+    Sound shoot;
+    shoot.setBuffer(shotBuffer);
+    bool testsound = 0;
     while (isGameMenu) {
+
         Event event;
         while (window.pollEvent(event))
             if (event.type == Event::Closed)
@@ -170,11 +196,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         
         SumRightLettersSelectPlayer
                 = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
-        if (Selectnum == 1) {
-            SumRightLettersSelectPlayer++;
-            WordLetter[rand_letter]=1;
-        }
-
+        
         if (tm != 0)
             SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
         else {
@@ -249,23 +271,37 @@ void GameMenu(RenderWindow& window, int Selectnum)
                 }
             }
         }
-
-        if (SummMistakes < CountPossibleMistakes)
-            window.draw(GameBackground);
-        else {
+        
+        if (tm) {
+            if (SummMistakes == CountPossibleMistakes - 1 && tm != 0
+                && tm != 10) {
+                window.draw(GameBackground_victory[0]);
+                window.draw(TimerNumbersSprite[tm - 1]);
+                state = 1;
+            } else
+                window.draw(GameBackground);
+        } else {
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);
         }
-
         for (int i = 0; i < NUMBERLETTERS; ++i) {
             window.draw(AlphabetSprite[i]);
         }
 
-        if (SumRightLettersSelectPlayer == CountRightLetters) {
-            window.draw(VictorySprite);
-        }
+        if (SumRightLettersSelectPlayer == CountRightLetters && state == 1) {
+            if (testsound == 0) {
+                shoot.play();
+                testsound = 1;
+            }
+            window.draw(GameBackground_victory[2]);
 
-        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes
+        }
+         else if (SumRightLettersSelectPlayer == CountRightLetters && state == 0)
+            window.draw(VictorySprite);
+            
+        
+
+        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes-1
             && SumRightLettersSelectPlayer < CountRightLetters)
             window.draw(PartsGallowsSprite[SummMistakes]);
 
@@ -295,9 +331,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
             }
         }
 
-        if (SummMistakes == CountPossibleMistakes - 1 && tm != 0 && tm != 10) {
-            window.draw(TimerNumbersSprite[tm - 1]);
-        }
+        
         window.display();
     }
 
