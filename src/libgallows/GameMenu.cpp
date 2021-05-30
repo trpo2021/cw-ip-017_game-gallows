@@ -79,7 +79,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         PartsGallowsSprite[i].setTextureRect(
                 IntRect(CutImageXPartsGallows, 1, 241, 398));
         PartsGallowsSprite[i].setPosition(800, 240);
- 
+
             CutImageXPartsGallows += 242;
     }
 
@@ -184,7 +184,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     shotBuffer.loadFromFile("Music/Shot_sound.wav");
     Sound shoot;
     shoot.setBuffer(shotBuffer);
-    bool testsound = 0;
+    bool PlayShoot = 0;
     while (isGameMenu) {
 
         Event event;
@@ -193,10 +193,10 @@ void GameMenu(RenderWindow& window, int Selectnum)
                 window.close();
 
         LetterNum = -1;
-        
+
         SumRightLettersSelectPlayer
                 = ManYouRight(Markers, word, NUMBERLETTERS, WORDSIZE);
-        
+
         if (tm != 0)
             SummMistakes = SumMistakes(Markers, word, NUMBERLETTERS, WORDSIZE);
         else {
@@ -262,16 +262,15 @@ void GameMenu(RenderWindow& window, int Selectnum)
                                 WordLetter[j] = 1;
                     }
 
-            for (int i = 0; i < NUMBERLETTERS; ++i) {
+            for (int i = 0; i < NUMBERLETTERS; ++i)
                 if (Markers[i] == 1) {
                     if (CheckLetter(word, WORDSIZE, i))
                         MarkerSprite[i].setColor(Color::Green);
                     else
                         MarkerSprite[i].setColor(Color::Red);
                 }
-            }
         }
-        
+
         if (tm) {
             if (SummMistakes == CountPossibleMistakes - 1 && tm != 0
                 && tm != 10) {
@@ -284,45 +283,34 @@ void GameMenu(RenderWindow& window, int Selectnum)
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);
         }
-        for (int i = 0; i < NUMBERLETTERS; ++i) {
-            window.draw(AlphabetSprite[i]);
-        }
 
         if (SumRightLettersSelectPlayer == CountRightLetters && state == 1) {
-            if (testsound == 0) {
+            if (PlayShoot == 0) {
                 shoot.play();
-                testsound = 1;
+                PlayShoot = 1;
             }
             window.draw(GameBackground_victory[2]);
-
         }
          else if (SumRightLettersSelectPlayer == CountRightLetters && state == 0)
             window.draw(VictorySprite);
-            
-        
 
         if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes-1
             && SumRightLettersSelectPlayer < CountRightLetters)
             window.draw(PartsGallowsSprite[SummMistakes]);
 
-        for (int i = 0; i < NUMBERLETTERS; ++i)
-            if (Markers[i])
-                window.draw(MarkerSprite[i]);
-
-
-        
-
         if (SummMistakes < CountPossibleMistakes
             && SumRightLettersSelectPlayer < CountRightLetters) {
-            if (Selectnum == 1) {
-               
+            if (Selectnum != 3) {
                 for (int i = 0; i < Themewordsize; i++)
                     window.draw(ThemeSprite[i]);
             }
-            if (Selectnum == 2)
 
-                for (int i = 0; i < Themewordsize; i++)
-                    window.draw(ThemeSprite[i]);
+            for (int i = 0; i < NUMBERLETTERS; ++i) {
+                window.draw(AlphabetSprite[i]);
+                if (Markers[i])
+                    window.draw(MarkerSprite[i]);
+            }
+
             for (int i = 0; i < WORDSIZE; i++) {
                 window.draw(CellSprite[i]);
 
@@ -331,7 +319,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
             }
         }
 
-        
+
         window.display();
     }
 
