@@ -16,4 +16,4 @@ jobs:
         run: make test && ./bin/gallows-test.exe
 
       - name: Build application
-        run: sudo apt install libsfml-dev make
+        run: sudo apt install libsfml-dev && make
