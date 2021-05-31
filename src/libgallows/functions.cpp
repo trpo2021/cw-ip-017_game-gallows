@@ -40,7 +40,7 @@ int ManYouRight(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
 }
 void Theme_Word(string& tema, string& word)
 {
-    //srand(time(NULL));
+    srand(time(NULL));
     string path[5]
         = { "Words/ARXITEKTYRA.txt",
            "Words/JIVOTNuE.txt",

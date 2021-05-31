@@ -11,15 +11,13 @@ using namespace std;
 
 void GameMenu(RenderWindow& window, int Selectnum)
 {
-    //srand(time(NULL));
-    string theme = "EDA", word = "ANANAS";
-    //Theme_Word(theme, word);
-    cout << word;
-    int rand_letter = 0;
-    //int rand_letter = rand() % WORDSIZE;
+    srand(time(NULL));
+    string theme, word;
+    Theme_Word(theme, word);
     const int CountPossibleMistakes = 6;
     int WORDSIZE = word.length();
     int Themewordsize = theme.length();
+    int rand_letter = rand() % WORDSIZE;
     int* IndexTheme = new int[Themewordsize];
     int CountRightLetters;
     CountRightLetters = non_repeating_characters(WORDSIZE, word);
@@ -141,15 +139,16 @@ void GameMenu(RenderWindow& window, int Selectnum)
         ThemeSprite[i].setTexture(WordImage);
         ThemeSprite[i].setTextureRect(IntRect(CutImageX, 25, 47, 69));
     }
-    int Theme_Letter_positionX = 420;
+
+    int Theme_Letter_positionX = -16 * Themewordsize + 563;
     for (int i = 0; i < Themewordsize; i++) {
         ThemeSprite[i].setPosition(Theme_Letter_positionX, 160);
-        Theme_Letter_positionX += 35;
+        Theme_Letter_positionX += 40;
     }
     Sprite* CellSprite = new Sprite[WORDSIZE];
     for (int i = 0; i < WORDSIZE; i++)
         CellSprite[i].setTexture(cell_file);
-    int CellPositionX = 260;
+    int CellPositionX = -50 * WORDSIZE + 620;
     for (int i = 0; i < WORDSIZE; i++) {
         CellSprite[i].setPosition(CellPositionX, 150);
         WordSprite[i].setPosition(CellPositionX + 8, 80);
@@ -158,7 +157,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite VictorySprite;
     VictorySprite.setTexture(VictoryTexture);
-    VictorySprite.setPosition(200, 100);
+    VictorySprite.setPosition(0, 0);
 
     bool isGameOver = 0;
     bool isGameMenu = 1;
@@ -321,8 +320,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
                     window.draw(WordSprite[i]);
             }
         }
-
-
         window.display();
     }
 
