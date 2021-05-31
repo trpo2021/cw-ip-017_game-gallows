@@ -165,7 +165,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
     bool Markers[NUMBERLETTERS] = {0};
     int SummMistakes = -1;
     int SumRightLettersSelectPlayer = 0;
-
     bool* WordLetter = new bool[WORDSIZE];
     for (int i = 0; i < WORDSIZE; ++i)
         WordLetter[i] = 0;
@@ -173,7 +172,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
         Markers[IndexWord[rand_letter]] = 1;
         SumRightLettersSelectPlayer++;
         for (int j = 0; j < WORDSIZE; ++j)
-            if (IndexWord[j] == rand_letter)
+            if (IndexWord[j] == IndexWord[rand_letter]) 
                 WordLetter[j] = 1;
     }
 
@@ -292,9 +291,14 @@ void GameMenu(RenderWindow& window, int Selectnum)
                 PlayShoot = 1;
             }
             window.draw(GameBackground_victory[2]);
-        }
-         else if (SumRightLettersSelectPlayer == CountRightLetters && state == 0)
+        } else if (
+                SumRightLettersSelectPlayer == CountRightLetters && state == 0)
             window.draw(VictorySprite);
+        else if (SummMistakes == CountPossibleMistakes) {
+            window.draw(GameBackground_defeat);
+            window.draw(DefeatSprite);    
+        }
+            
 
         if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes-1
             && SumRightLettersSelectPlayer < CountRightLetters)
