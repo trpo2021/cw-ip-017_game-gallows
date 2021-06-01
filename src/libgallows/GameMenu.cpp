@@ -57,7 +57,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite ResetGameSprite;
     ResetGameSprite.setTexture(ResetGameTexture);
-    ResetGameSprite.setPosition(400, 800);
+    ResetGameSprite.setPosition(400, 50);
 
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
@@ -71,7 +71,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite DefeatSprite;
     DefeatSprite.setTexture(DefeatTexture);
-    DefeatSprite.setPosition(65, 100);
+    DefeatSprite.setPosition(65, 150);
 
     Sprite PartsGallowsSprite[CountPossibleMistakes - 1];
     int CutImageXPartsGallows = 1;
