@@ -1,8 +1,8 @@
+#include "ResetGame.h"
 #include "functions.h"
 #include "menu.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <Windows.h>
 #include <ctime>
 #include <iostream>
 #include <string>
@@ -57,7 +57,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite ResetGameSprite;
     ResetGameSprite.setTexture(ResetGameTexture);
-    ResetGameSprite.setPosition(400, 800);
+    ResetGameSprite.setPosition(400, 50);
 
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
@@ -71,7 +71,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite DefeatSprite;
     DefeatSprite.setTexture(DefeatTexture);
-    DefeatSprite.setPosition(65, 100);
+    DefeatSprite.setPosition(65, 150);
 
     Sprite PartsGallowsSprite[CountPossibleMistakes - 1];
     int CutImageXPartsGallows = 1;
@@ -190,7 +190,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
     shoot.setBuffer(shotBuffer);
     bool PlayShoot = 0;
     while (isGameMenu) {
-       
         Event event;
         while (window.pollEvent(event))
             if (event.type == Event::Closed)

@@ -76,8 +76,6 @@ TEST_CASE("ManYouRight")
                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1};
 
     REQUIRE(ManYouRight(Markers4, word, NUMBERLETTERS, WORDSIZE) == 1);
-
-
 }
 
 TEST_CASE("non_repeating_characters")

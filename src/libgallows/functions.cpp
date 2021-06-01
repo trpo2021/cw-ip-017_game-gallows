@@ -1,30 +1,34 @@
-#include <SFML/Graphics.hpp>
-#include <fstream>
 #include "functions.h"
-#include <string>
-#include <iostream>
-#include <ctime>
 #include "menu.h"
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <string>
 using namespace sf;
 using namespace std;
 
 std::string alphabet = "ABVGDEJZIyKLMNOPRSTYFXC4HmhuieUa";
 
-void FillingIndexArray(string word, int WORDSIZE, int NUMBERLETTERS, int* IndexWord) {
+void FillingIndexArray(
+        string word, int WORDSIZE, int NUMBERLETTERS, int* IndexWord)
+{
     for (int i = 0; i < WORDSIZE; ++i)
         for (int j = 0; j < NUMBERLETTERS; ++j)
             if (word[i] == alphabet[j])
                 IndexWord[i] = j;
 }
-int CheckLetter(string word, int WORDSIZE, int a) {
+int CheckLetter(string word, int WORDSIZE, int a)
+{
     for (int i = 0; i < WORDSIZE; ++i) {
         if (alphabet[a] == word[i])
             return 1;
     }
     return 0;
 }
-int SumMistakes(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
+int SumMistakes(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE)
+{
     int s = -1;
     for (int i = 0; i < NUMBERLETTERS; ++i) {
         if (!CheckLetter(word, WORDSIZE, i))
@@ -32,7 +36,8 @@ int SumMistakes(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
     }
     return s;
 }
-int ManYouRight(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE) {
+int ManYouRight(bool* Markers, string word, int NUMBERLETTERS, int WORDSIZE)
+{
     int s = 0;
     for (int i = 0; i < NUMBERLETTERS; ++i) {
         if (CheckLetter(word, WORDSIZE, i))
@@ -44,11 +49,11 @@ void Theme_Word(string& tema, string& word)
 {
     srand(time(NULL));
     string path[5]
-        = { "Words/ARXITEKTYRA.txt",
-           "Words/JIVOTNuE.txt",
-           "Words/EDA.txt",
-           "Words/RASTENIa.txt",
-           "Words/TRANSPORT.txt" };
+            = {"Words/ARXITEKTYRA.txt",
+               "Words/JIVOTNuE.txt",
+               "Words/EDA.txt",
+               "Words/RASTENIa.txt",
+               "Words/TRANSPORT.txt"};
     int k;
     k = rand() % 5;
     switch (k) {
@@ -71,13 +76,10 @@ void Theme_Word(string& tema, string& word)
 
     ifstream fin;
     fin.open(path[k]);
-    if (!fin.is_open())
-    {
-      cout << "ERROR OPEN FILE!" << endl;
-    }
-    else
-    {
-      cout << "File is open" << endl;
+    if (!fin.is_open()) {
+        cout << "ERROR OPEN FILE!" << endl;
+    } else {
+        cout << "File is open" << endl;
     }
 
     string str[11];
@@ -110,14 +112,4 @@ int non_repeating_characters(int WORDSIZE, string word)
         }
     }
     return non_repeating;
-}
-
-void ResetGame(
-        bool& button, Sprite& ResetGameSprite, RenderWindow& window)
-{
-    if (IntRect(400, 800, 367, 49).contains(Mouse::getPosition(window))) {
-        button = 1;
-        ResetGameSprite.setColor(Color::Blue);
-
-    }
 }
