@@ -34,7 +34,7 @@ test: $(TEST_PATH)
 -include $(DEPS)
 
 $(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
-	$(CXX) $(CPPFLAGS) $^ -o $@ bin -lsfml-graphics-2 -lsfml-window-2 -lsfml-system-2 -lsfml-audio-2 $(LDFLAGS) $(LDLIBS)
+	$(CXX) $(CPPFLAGS) $^ -o $@ -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio $(LDFLAGS) $(LDLIBS)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
 	$(CXX) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
