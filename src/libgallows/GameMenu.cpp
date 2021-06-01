@@ -21,7 +21,8 @@ void GameMenu(RenderWindow& window, int Selectnum)
     int* IndexTheme = new int[Themewordsize];
     int CountRightLetters;
     CountRightLetters = non_repeating_characters(WORDSIZE, word);
-    const int NUMBERLETTERS = 32; // Количество букв в алфавите
+    const int NUMBERLETTERS = 31; // Количество букв в алфавите
+
 
     int* IndexWord = new int[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
@@ -40,7 +41,8 @@ void GameMenu(RenderWindow& window, int Selectnum)
             MarkerTexture,
             WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
             PartsGallowsTexture,
-            TimerNumbersTexture;
+            TimerNumbersTexture,
+            ResetGameTexture;
     GameMenuDefeatTexture.loadFromFile(
             "Images/Background_in_the_game_defeat.jpg");
     GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
@@ -55,7 +57,12 @@ void GameMenu(RenderWindow& window, int Selectnum)
     PartsGallowsTexture.loadFromFile("Images/Parts_Of_Gallows.png");
     DefeatTexture.loadFromFile("Images/defeat.jpg");
     TimerNumbersTexture.loadFromFile("Images/numbers_for_timer.png");
+    ResetGameTexture.loadFromFile("Images/reset_buttons.png");
 
+    Sprite ResetGameSprite;
+    ResetGameSprite.setTexture(ResetGameTexture);
+    ResetGameSprite.setPosition(500, 900);
+  
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
     for (int i = 0; i < 9; ++i) {
@@ -215,6 +222,8 @@ void GameMenu(RenderWindow& window, int Selectnum)
             && SumRightLettersSelectPlayer < CountRightLetters)
             tm = 10 - timer.getElapsedTime().asSeconds();
 
+        ResetGameSprite.setColor(Color::Black);
+
         for (int i = 0; i < NUMBERLETTERS; ++i) {
             AlphabetSprite[i].setColor(Color::Black);
         }
@@ -236,7 +245,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
             || SummMistakes == CountPossibleMistakes)
             isGameOver = 1;
         if (isGameOver == 0) {
-            for (int i = 0; i < 32; ++i) {
+            for (int i = 0; i < NUMBERLETTERS; ++i) {
                 if (IntRect(RowAlphabetX, RowAlphabetY, 44, 60)
                             .contains(Mouse::getPosition(window))) {
                     AlphabetSprite[i].setColor(sf::Color::Blue);
@@ -254,7 +263,10 @@ void GameMenu(RenderWindow& window, int Selectnum)
             RowAlphabetX = StartRowAlphabetX;
             RowAlphabetY = StartRowAlphabetY;
 
-            if (Mouse::isButtonPressed(Mouse::Left))
+            /*if (IntRect(500, 900, 585, 120).contains(Mouse::getPosition(window)))
+                LetterNum = 32;*/
+
+            if (Mouse::isButtonPressed(Mouse::Left)) {
                 for (int i = 0; i < NUMBERLETTERS; ++i)
                     if (LetterNum == i) {
                         Markers[i] = 1;
@@ -262,6 +274,12 @@ void GameMenu(RenderWindow& window, int Selectnum)
                             if (IndexWord[j] == i)
                                 WordLetter[j] = 1;
                     }
+               
+            }
+           /* if (LetterNum == 32) {
+                ResetGameSprite.setColor(Color::Blue);
+                window.draw(ResetGameSprite);
+            }*/
 
             for (int i = 0; i < NUMBERLETTERS; ++i)
                 if (Markers[i] == 1) {
@@ -292,8 +310,12 @@ void GameMenu(RenderWindow& window, int Selectnum)
             }
             window.draw(GameBackground_victory[2]);
         } else if (
-                SumRightLettersSelectPlayer == CountRightLetters && state == 0)
+                SumRightLettersSelectPlayer == CountRightLetters
+                && state == 0)
+        {
             window.draw(VictorySprite);
+
+        }
         else if (SummMistakes == CountPossibleMistakes) {
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);    
