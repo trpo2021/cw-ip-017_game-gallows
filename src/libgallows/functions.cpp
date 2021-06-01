@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include "menu.h"
+#include <SFML/Audio.hpp>
 using namespace sf;
 using namespace std;
 
@@ -108,4 +110,14 @@ int non_repeating_characters(int WORDSIZE, string word)
         }
     }
     return non_repeating;
+}
+
+void ResetGame(
+        bool& button, Sprite& ResetGameSprite, RenderWindow& window)
+{
+    if (IntRect(400, 800, 367, 49).contains(Mouse::getPosition(window))) {
+        button = 1;
+        ResetGameSprite.setColor(Color::Blue);
+
+    }
 }
