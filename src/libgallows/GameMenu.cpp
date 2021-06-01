@@ -1,3 +1,4 @@
+#include "ResetGame.h"
 #include "functions.h"
 #include "menu.h"
 #include <SFML/Audio.hpp>
