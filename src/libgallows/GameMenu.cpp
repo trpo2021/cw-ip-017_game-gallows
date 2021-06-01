@@ -1,3 +1,4 @@
+#include "ResetGame.h"
 #include "functions.h"
 #include "menu.h"
 #include <SFML/Audio.hpp>
@@ -5,7 +6,6 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-#include <Windows.h>
 using namespace sf;
 using namespace std;
 
@@ -21,8 +21,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     int* IndexTheme = new int[Themewordsize];
     int CountRightLetters;
     CountRightLetters = non_repeating_characters(WORDSIZE, word);
-    const int NUMBERLETTERS = 31; // Количество букв в алфавите
-
+    const int NUMBERLETTERS = 32; // Количество букв в алфавите
 
     int* IndexWord = new int[WORDSIZE];
     FillingIndexArray(word, WORDSIZE, NUMBERLETTERS, IndexWord);
@@ -37,12 +36,9 @@ void GameMenu(RenderWindow& window, int Selectnum)
     Last10Sec.setVolume(5.f);
 
     Texture GameMenuTexture, GameMenuTexture_victory0, GameMenuTexture_victory1,
-            GameMenuTexture_victory2 ,AlphabetTexture, cell_file,
-            MarkerTexture,
+            GameMenuTexture_victory2, AlphabetTexture, cell_file, MarkerTexture,
             WordImage, GameMenuDefeatTexture, VictoryTexture, DefeatTexture,
-            PartsGallowsTexture,
-            TimerNumbersTexture,
-            ResetGameTexture;
+            PartsGallowsTexture, TimerNumbersTexture, ResetGameTexture;
     GameMenuDefeatTexture.loadFromFile(
             "Images/Background_in_the_game_defeat.jpg");
     GameMenuTexture.loadFromFile("Images/Background_in_the_game.jpg");
@@ -61,8 +57,8 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite ResetGameSprite;
     ResetGameSprite.setTexture(ResetGameTexture);
-    ResetGameSprite.setPosition(500, 900);
-  
+    ResetGameSprite.setPosition(400, 800);
+
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
     for (int i = 0; i < 9; ++i) {
@@ -77,15 +73,15 @@ void GameMenu(RenderWindow& window, int Selectnum)
     DefeatSprite.setTexture(DefeatTexture);
     DefeatSprite.setPosition(65, 100);
 
-    Sprite PartsGallowsSprite[CountPossibleMistakes-1];
+    Sprite PartsGallowsSprite[CountPossibleMistakes - 1];
     int CutImageXPartsGallows = 1;
-    for (int i = 0; i < CountPossibleMistakes-1; ++i) {
+    for (int i = 0; i < CountPossibleMistakes - 1; ++i) {
         PartsGallowsSprite[i].setTexture(PartsGallowsTexture);
         PartsGallowsSprite[i].setTextureRect(
                 IntRect(CutImageXPartsGallows, 1, 241, 398));
         PartsGallowsSprite[i].setPosition(800, 240);
 
-            CutImageXPartsGallows += 242;
+        CutImageXPartsGallows += 242;
     }
 
     Sprite GameBackground(GameMenuTexture),
@@ -95,7 +91,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
     GameBackground_victory[0].setTexture(GameMenuTexture_victory0);
     GameBackground_victory[1].setTexture(GameMenuTexture_victory1);
     GameBackground_victory[2].setTexture(GameMenuTexture_victory2);
-    for (int  i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         GameBackground_victory[i].setPosition(0, 0);
     }
     GameBackground_defeat.setPosition(0, 0);
@@ -179,22 +175,21 @@ void GameMenu(RenderWindow& window, int Selectnum)
         Markers[IndexWord[rand_letter]] = 1;
         SumRightLettersSelectPlayer++;
         for (int j = 0; j < WORDSIZE; ++j)
-            if (IndexWord[j] == IndexWord[rand_letter]) 
+            if (IndexWord[j] == IndexWord[rand_letter])
                 WordLetter[j] = 1;
     }
 
     Clock timer;
     int tm = 10;
     bool StartTimer = 0;
-    int state = 0;
-
+    bool state = 0;
+    bool push_button = 0;
     SoundBuffer shotBuffer;
     shotBuffer.loadFromFile("Music/Shot_sound.wav");
     Sound shoot;
     shoot.setBuffer(shotBuffer);
     bool PlayShoot = 0;
     while (isGameMenu) {
-
         Event event;
         while (window.pollEvent(event))
             if (event.type == Event::Closed)
@@ -222,8 +217,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
             && SumRightLettersSelectPlayer < CountRightLetters)
             tm = 10 - timer.getElapsedTime().asSeconds();
 
-        ResetGameSprite.setColor(Color::Black);
-
         for (int i = 0; i < NUMBERLETTERS; ++i) {
             AlphabetSprite[i].setColor(Color::Black);
         }
@@ -233,6 +226,8 @@ void GameMenu(RenderWindow& window, int Selectnum)
         for (int i = 0; i < WORDSIZE; ++i) {
             WordSprite[i].setColor(Color::Black);
         }
+
+        ResetGameSprite.setColor(Color::Black);
 
         for (int i = 0; i < 9; ++i) {
             if (tm > 3)
@@ -263,10 +258,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
             RowAlphabetX = StartRowAlphabetX;
             RowAlphabetY = StartRowAlphabetY;
 
-            /*if (IntRect(500, 900, 585, 120).contains(Mouse::getPosition(window)))
-                LetterNum = 32;*/
-
-            if (Mouse::isButtonPressed(Mouse::Left)) {
+            if (Mouse::isButtonPressed(Mouse::Left))
                 for (int i = 0; i < NUMBERLETTERS; ++i)
                     if (LetterNum == i) {
                         Markers[i] = 1;
@@ -274,12 +266,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
                             if (IndexWord[j] == i)
                                 WordLetter[j] = 1;
                     }
-               
-            }
-           /* if (LetterNum == 32) {
-                ResetGameSprite.setColor(Color::Blue);
-                window.draw(ResetGameSprite);
-            }*/
 
             for (int i = 0; i < NUMBERLETTERS; ++i)
                 if (Markers[i] == 1) {
@@ -299,8 +285,18 @@ void GameMenu(RenderWindow& window, int Selectnum)
             } else
                 window.draw(GameBackground);
         } else {
+            ResetGame(push_button, ResetGameSprite, window);
             window.draw(GameBackground_defeat);
             window.draw(DefeatSprite);
+            window.draw(ResetGameSprite);
+
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                if (push_button) {
+                    GameMusic.stop();
+                    Last10Sec.stop();
+                    SelectmodeMenu(window);
+                }
+            }
         }
 
         if (SumRightLettersSelectPlayer == CountRightLetters && state == 1) {
@@ -308,21 +304,53 @@ void GameMenu(RenderWindow& window, int Selectnum)
                 shoot.play();
                 PlayShoot = 1;
             }
+            ResetGameSprite.setPosition(400, 300);
+            if (IntRect(400, 300, 367, 49)
+                        .contains(Mouse::getPosition(window))) {
+                push_button = 1;
+                ResetGameSprite.setColor(Color::Blue);
+            }
+            ResetGame(push_button, ResetGameSprite, window);
             window.draw(GameBackground_victory[2]);
+            window.draw(ResetGameSprite);
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                if (push_button) {
+                    GameMusic.stop();
+                    Last10Sec.stop();
+                    SelectmodeMenu(window);
+                }
+            }
         } else if (
                 SumRightLettersSelectPlayer == CountRightLetters
-                && state == 0)
-        {
+                && state == 0) {
+            ResetGame(push_button, ResetGameSprite, window);
             window.draw(VictorySprite);
-
+            window.draw(ResetGameSprite);
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                if (push_button) {
+                    GameMusic.stop();
+                    Last10Sec.stop();
+                    SelectmodeMenu(window);
+                }
+            }
         }
+
         else if (SummMistakes == CountPossibleMistakes) {
+            ResetGame(push_button, ResetGameSprite, window);
             window.draw(GameBackground_defeat);
-            window.draw(DefeatSprite);    
-        }
-            
+            window.draw(DefeatSprite);
 
-        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes-1
+            window.draw(ResetGameSprite);
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                if (push_button) {
+                    GameMusic.stop();
+                    Last10Sec.stop();
+                    SelectmodeMenu(window);
+                }
+            }
+        }
+
+        if (SummMistakes > -1 && SummMistakes < CountPossibleMistakes - 1
             && SumRightLettersSelectPlayer < CountRightLetters)
             window.draw(PartsGallowsSprite[SummMistakes]);
 

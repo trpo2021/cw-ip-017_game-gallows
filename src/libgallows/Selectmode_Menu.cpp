@@ -1,6 +1,6 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include "menu.h"
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 using namespace sf;
 
 void SelectmodeMenu(RenderWindow& window)
@@ -57,18 +57,18 @@ void SelectmodeMenu(RenderWindow& window)
         if (Mouse::isButtonPressed(Mouse::Left)) {
             if (Selectnum == 1) {
                 MenuMusic.stop();
-                GameMenu(window,Selectnum);
+                GameMenu(window, Selectnum);
                 isSelect = false;
             }
             if (Selectnum == 2) {
                 MenuMusic.stop();
-                GameMenu(window, Selectnum);
                 isSelect = false;
+                GameMenu(window, Selectnum);
             }
             if (Selectnum == 3) {
                 MenuMusic.stop();
-                GameMenu(window, Selectnum);
                 isSelect = false;
+                GameMenu(window, Selectnum);
             }
         }
         window.clear();
