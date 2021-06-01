@@ -57,7 +57,7 @@ void GameMenu(RenderWindow& window, int Selectnum)
 
     Sprite ResetGameSprite;
     ResetGameSprite.setTexture(ResetGameTexture);
-    ResetGameSprite.setPosition(400, 50);
+    ResetGameSprite.setPosition(420, 50);
 
     Sprite TimerNumbersSprite[9];
     int CutImageXPartsTimerNumbers = 56;
