@@ -190,7 +190,6 @@ void GameMenu(RenderWindow& window, int Selectnum)
     shoot.setBuffer(shotBuffer);
     bool PlayShoot = 0;
     while (isGameMenu) {
-       
         Event event;
         while (window.pollEvent(event))
             if (event.type == Event::Closed)

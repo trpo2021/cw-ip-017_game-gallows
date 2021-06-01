@@ -1,7 +1,7 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include "menu.h"
 #include "functions.h"
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 using namespace sf;
 
 void MainMenu(RenderWindow& window)
