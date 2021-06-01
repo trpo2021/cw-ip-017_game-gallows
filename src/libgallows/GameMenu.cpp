@@ -3,7 +3,6 @@
 #include "menu.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <Windows.h>
 #include <ctime>
 #include <iostream>
 #include <string>
